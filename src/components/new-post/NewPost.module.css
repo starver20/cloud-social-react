@@ -1,0 +1,50 @@
+.new-post {
+  background-color: var(--card-background-color);
+  padding: 1rem;
+  border-radius: var(--radius-2);
+  margin-bottom: 5rem;
+}
+
+.container {
+  display: flex;
+}
+
+.container > img {
+  margin-right: 1rem;
+}
+
+.content {
+  width: 100%;
+  height: 10rem;
+  resize: none;
+  background-color: var(--card-background-color);
+  border: none;
+  color: white;
+  font-size: var(--body-1);
+}
+
+/* .content::-webkit-scrollbar {
+  display: none;
+} */
+
+.content:active,
+.content:focus {
+  border: none;
+  outline: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post {
+  background-color: var(--primary-color);
+  border: none;
+  padding: 5px 1rem;
+  border-radius: var(--radius-2);
+  color: white;
+  font-size: var(--body-2);
+  font-weight: 600;
+  cursor: pointer;
+}

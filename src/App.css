@@ -1,51 +1,52 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --primary-color: #5596e6;
+  --background-color: rgb(20, 24, 34);
+  --light-background-color: rgb(47, 59, 80);
+  --card-background-color: #202836;
+  --grey-light-color: #8b9294;
+  --line-light-color: rgb(57, 71, 97);
+  --inactive: #2b3649;
+
+  --header-1: 4rem;
+  --header-2: 3rem;
+  --header-3: 2rem;
+
+  --body-1: 1.8rem;
+  --body-2: 1.6rem;
+  --body-3: 1.4rem;
+  --body-4: 1.2rem;
+  --body-5: 1rem;
+  --body-6: 8px;
+  --body-7: 6px;
+
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 1.6rem;
+  --spacing-20: 2rem;
+  --spacing-24: 2.4rem;
+  --spacing-28: 2.8rem;
+  --spacing-32: 3.2rem;
+  --spacing-36: 3.6rem;
+  --spacing-40: 4rem;
+
+  --radius-1: 1.6rem;
+  --radius-2: 8px;
+  --radius-3: 2px;
+  --radius-full: 100%;
+
+  font-size: 62.5%;
 }
 
-.App-logo {
-  height: 40vmin;
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Mulish', sans-serif;
+}
+
+iframe {
   pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #22201c;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-.brand-title {
-  font-size: 3rem;
-  color: #d9d9d9;
-}
-
-.brand-title span {
-  color: #ffde59;
-}
-
-.brand-description {
-  font-size: 1.4rem;
-}
-
-.links {
-  display: flex;
-}
-
-.links a {
-  color: #d9d9d9;
-  font-size: 1.2rem;
-  margin: 1rem;
 }
