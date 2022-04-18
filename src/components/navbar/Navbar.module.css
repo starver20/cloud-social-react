@@ -76,6 +76,10 @@ svg {
   margin-right: 1rem;
 }
 
+.action:hover {
+  background-color: var(--primary-color-hover);
+}
+
 @media (max-width: 500px) {
   .brand span {
     display: none;

@@ -1,0 +1,107 @@
+.main-content {
+  width: 100%;
+  min-height: calc(100vh - 50px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--light-background-color);
+  color: white;
+}
+
+.guest {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.card {
+  text-align: center;
+  background-color: var(--card-background-color);
+  width: 20vw;
+  min-width: 300px;
+  height: auto;
+  padding: var(--spacing-40);
+  border-radius: var(--radius-3);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.card > h1 {
+  font-size: var(--body-2);
+  margin-bottom: 1rem;
+}
+
+.card .creds {
+  width: 100%;
+  margin: var(--spacing-8) auto;
+  height: var(--spacing-40);
+  border-radius: var(--radius-3);
+  padding: var(--spacing-12) var(--spacing-8);
+  font-size: var(--body-3);
+  border: 1px solid var(--sub-text-color);
+}
+
+.card .creds:focus {
+  outline: none;
+}
+
+.card h1 {
+  font-size: var(--header-3);
+  font-weight: 700;
+}
+
+.card h3 {
+  font-size: var(--body-3);
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.options .remember-chk {
+  display: flex;
+  align-items: center;
+  font-size: var(--body-4);
+  margin-bottom: 1rem;
+}
+
+.remember-chk input {
+  margin-right: var(--spacing-8);
+  accent-color: var(--primary-color);
+}
+
+.remember-chk input:focus {
+  outline: none;
+}
+
+.auth-btn {
+  height: var(--spacing-40);
+  margin: 2rem 0;
+  width: 100%;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  font-size: var(--body-2);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-btn:hover {
+  background-color: var(--primary-color-hover);
+}
+
+.card span,
+.card .link {
+  font-size: var(--body-4);
+}
+
+.card span {
+  color: var(--sub-text-color);
+}
+
+.card .link {
+  color: var(--primary-color);
+}
