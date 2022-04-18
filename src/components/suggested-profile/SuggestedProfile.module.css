@@ -1,0 +1,31 @@
+.suggestion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--line-light-color);
+  padding: 1rem 0;
+}
+
+.suggested-profile {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.suggested-profile > img {
+  margin: 0 1rem 0 0;
+  cursor: pointer;
+}
+
+.action {
+  font-size: var(--body-3);
+  font-weight: 700;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.username {
+  font-size: var(--body-2);
+  font-weight: 600;
+  cursor: pointer;
+}
