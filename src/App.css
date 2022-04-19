@@ -2,6 +2,7 @@
 
 :root {
   --primary-color: #5596e6;
+  --primary-color-hover: #1979ee;
   --background-color: rgb(20, 24, 34);
   --light-background-color: rgb(47, 59, 80);
   --card-background-color: #202836;

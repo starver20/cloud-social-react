@@ -1,9 +1,21 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import cloud from '../../assets/cloud.png';
+import { useAuth } from '../../context/auth/auth-context';
 
 const Navbar = ({ page = 'home' }) => {
-  let jwt = true;
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const authClickHandler = (e) => {
+    // If user is logged in, then log him out and clear the wishlist and cart
+    if (user) {
+      // clear all context data
+      logout();
+      return;
+    }
+    navigate('/login');
+  };
 
   return (
     <>
@@ -52,7 +64,7 @@ const Navbar = ({ page = 'home' }) => {
           </div> */}
           <div className="nav-action-container">
             <div className="nav-action">
-              {jwt ? (
+              {user ? (
                 <>
                   <div className="nav-icon">
                     <svg
@@ -121,14 +133,24 @@ const Navbar = ({ page = 'home' }) => {
                       <Link to="/profile">
                         <button className="nav--action__login">Profile</button>
                       </Link>
-                      <button className="nav--action__login">Logout</button>
+                      <button
+                        onClick={authClickHandler}
+                        className="nav--action__login"
+                      >
+                        Logout
+                      </button>
                     </div>
                   </div>
                 </>
               ) : (
                 <>
                   {page !== 'auth' && (
-                    <button className="nav--action__login">LOGIN</button>
+                    <button
+                      onClick={authClickHandler}
+                      className={`nav--action__login ${classes.action}`}
+                    >
+                      LOGIN
+                    </button>
                   )}
                 </>
               )}
