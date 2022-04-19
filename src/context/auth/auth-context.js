@@ -22,7 +22,6 @@ const useProvideAuth = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
 
   const login = async (body, rememberMe) => {
-    console.log(body);
     let response = await axios.post('/api/auth/login', body);
     if (response.status === 200) {
       if (rememberMe) {
@@ -50,7 +49,6 @@ const useProvideAuth = () => {
         jwt: response.data.encodedToken,
       });
     }
-    console.log(response);
     return { user: response.data.createdUser, status: response.status };
   };
 
