@@ -25,8 +25,6 @@ const Login = () => {
       );
 
       if (status === 200) {
-        toast.success('Login successfull.');
-
         navigate(navigateTo, { replace: true });
       } else {
         alert('Invalid email or password');
@@ -47,7 +45,6 @@ const Login = () => {
       );
 
       if (status === 200) {
-        toast.success('Login successfull.');
         navigate(navigateTo, { replace: true });
       } else {
         alert('Invalid email or password');

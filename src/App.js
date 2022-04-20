@@ -4,8 +4,8 @@ import Dashboard from './pages/dashboard/Dashboard';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import RequiresAuth from './components/auth/RequiresAuth';
-
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 function App() {
   return (
