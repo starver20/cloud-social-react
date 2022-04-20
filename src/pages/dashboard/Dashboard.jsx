@@ -5,8 +5,10 @@ import NewPost from '../../components/new-post/NewPost';
 import SidebarCard from '../../components/card/sidebar-card/SidebarCard';
 import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
 import Post from '../../components/post/Post';
+import { useUser } from '../../context/user/user-context';
 
 const Dashboard = () => {
+  const { allPosts } = useUser();
   return (
     <div>
       <Navbar />
@@ -17,12 +19,9 @@ const Dashboard = () => {
           </div> */}
           <div className={classes.timeline}>
             <NewPost />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
+            {allPosts.length > 0
+              ? allPosts.map((post) => <Post key={post.id} {...post} />)
+              : null}
           </div>
           <div className={`${classes['right-sidebar']} ${classes.sidebar}`}>
             <SidebarCard>
