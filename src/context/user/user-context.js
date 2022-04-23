@@ -1,34 +1,64 @@
 import axios from 'axios';
 import { createContext, useContext, useReducer, useEffect } from 'react';
 import { useAuth } from '../auth/auth-context';
+import { useManipulators } from '../../hooks/useManipulators';
 
 const initialState = {
   followers: [],
   following: [],
   allPosts: [],
+  allUsers: [],
   userPosts: [],
+  followingPosts: [],
   userDispatch: () => {},
 };
 
 const UserContext = createContext(initialState);
 
 const userReducer = (state, action) => {
+  const { getFollowingUsernames } = useManipulators();
+
   switch (action.type) {
     case 'INITIALIZE_DATA': {
       const {
-        user: { bookmarks, followers, following, username } = {},
+        user: { user: { bookmarks, followers, following, username } = {} } = {},
         posts,
+        allUsers,
       } = action.data;
+
+      // get array of usernames of users who i am following
+      const followingUsernames = getFollowingUsernames(following);
+
       return {
         ...state,
         bookmarks,
         followers,
         following,
-        allPosts: posts,
         userPosts: posts.filter((post) => post.username === username),
+        followingPosts: posts.filter((post) =>
+          followingUsernames.includes(post.username)
+        ),
+        allPosts: posts,
+        allUsers,
+      };
+    }
+    case 'UPDATE_FOLLOWING': {
+      const followingUsernames = getFollowingUsernames(
+        action.payload.following
+      );
+      console.log(followingUsernames);
+      return {
+        ...state,
+        following: action.payload.following,
+        followingPosts: state.allPosts.filter((post) =>
+          followingUsernames.includes(post.username)
+        ),
       };
     }
 
+    case 'CLEAR_DATA': {
+      return { ...initialState };
+    }
     default:
       return state;
   }
@@ -44,10 +74,14 @@ const UserProvider = ({ children }) => {
       let {
         data: { posts },
       } = await axios.get('api/posts');
-      console.log(posts);
+
+      let {
+        data: { users },
+      } = await axios.get('api/users');
+
       userDispatch({
         type: 'INITIALIZE_DATA',
-        data: { user: user ? user : {}, posts },
+        data: { user: user ? user : {}, posts, allUsers: users },
       });
     };
 

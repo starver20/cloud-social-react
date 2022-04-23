@@ -1,7 +1,18 @@
 import React from 'react';
 import classes from './SuggestedProfile.module.css';
+import { useAsync } from '../../hooks/useAsync';
+import { followUserService } from '../../utils/user-utils';
+import { useUser } from '../../context/user/user-context';
+import { Oval } from 'react-loader-spinner';
+import DotLoader from 'react-spinners/DotLoader';
+const SuggestedProfile = ({ username, _id }) => {
+  const { userDispatch } = useUser();
+  const { callAsyncFunction: followUser, loading } = useAsync(
+    followUserService,
+    userDispatch,
+    _id
+  );
 
-const SuggestedProfile = () => {
   return (
     <>
       <div className={classes.suggestion}>
@@ -11,9 +22,18 @@ const SuggestedProfile = () => {
             src="https://pbs.twimg.com/profile_images/1220285531164233729/A98RISKc_200x200.jpg"
             alt="small avatar"
           />
-          <span className={classes.username}>amar_narute</span>
+          <span className={classes.username}>{username}</span>
         </div>
-        <span className={classes.action}>Follow</span>
+
+        <button
+          onClick={() => {
+            followUser();
+          }}
+          className={classes.action}
+          disabled={loading}
+        >
+          Follow
+        </button>
       </div>
     </>
   );
