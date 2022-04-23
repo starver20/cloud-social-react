@@ -15,7 +15,6 @@ const useAsync = (asyncFunction, dispatch, payload, check) => {
       await asyncFunction(dispatch, navigate, payload, jwt, check);
       setLoading(false);
     } catch (err) {
-      console.log(err);
       alert(err);
     }
   };

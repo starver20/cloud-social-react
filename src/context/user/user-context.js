@@ -46,7 +46,6 @@ const userReducer = (state, action) => {
       const followingUsernames = getFollowingUsernames(
         action.payload.following
       );
-      console.log(followingUsernames);
       return {
         ...state,
         following: action.payload.following,

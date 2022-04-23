@@ -24,7 +24,6 @@ const useProvideAuth = () => {
 
   const login = async (body, rememberMe) => {
     let response = await axios.post('/api/auth/login', body);
-    console.log(response);
     if (response.status === 200) {
       toast.success('Login successfull.');
       if (rememberMe) {
