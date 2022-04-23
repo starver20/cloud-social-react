@@ -1,12 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import classes from './Dashboard.module.css';
 import NewPost from '../../components/new-post/NewPost';
 import SidebarCard from '../../components/card/sidebar-card/SidebarCard';
 import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
 import Post from '../../components/post/Post';
+import { useUser } from '../../context/user/user-context';
+import { useAuth } from '../../context/auth/auth-context';
+import { useManipulators } from '../../hooks/useManipulators';
 
 const Dashboard = () => {
+  const {
+    user: {
+      user: { username },
+      jwt,
+    },
+    logout,
+  } = useAuth();
+  const { userDispatch, followingPosts, allUsers, following } = useUser();
+  const navigate = useNavigate();
+
+  const authClickHandler = (e) => {
+    // If user is logged in, then log him out and clear the wishlist and cart or else navigate to login
+    if (jwt) {
+      userDispatch({ type: 'CLEAR_DATA' });
+      logout();
+      return;
+    }
+    navigate('/login');
+  };
+
+  const [seeAll, setSeeAll] = useState(false);
+
+  const { getFollowingUsernames } = useManipulators();
+
+  const toggleSeeAll = () => setSeeAll((prevState) => !prevState);
+
+  const followingUsernames = getFollowingUsernames(following);
+
+  const suggestions = allUsers
+    ?.filter(
+      (otherUser) =>
+        !followingUsernames?.includes(otherUser.username) &&
+        otherUser.username !== username
+    )
+    .slice(0, seeAll ? allUsers.length : 5);
+
   return (
     <div>
       <Navbar />
@@ -17,12 +57,13 @@ const Dashboard = () => {
           </div> */}
           <div className={classes.timeline}>
             <NewPost />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
+            {followingPosts.length > 0 ? (
+              followingPosts.map((post) => <Post key={post.id} {...post} />)
+            ) : (
+              <h1 className={classes.nopost}>
+                Follow people to see what they post!
+              </h1>
+            )}
           </div>
           <div className={`${classes['right-sidebar']} ${classes.sidebar}`}>
             <SidebarCard>
@@ -35,20 +76,22 @@ const Dashboard = () => {
                   />
                   <span className={classes.username}>amar_narute</span>
                 </div>
-                <span className={classes.action}>Logout</span>
+                <button onClick={authClickHandler} className={classes.action}>
+                  Logout
+                </button>
               </div>
               <div>
-                <div className={classes['suggestions-title']}>
-                  <span>Suggestions for you</span>
-                  <span>See All</span>
-                </div>
+                {suggestions.length > 0 ? (
+                  <div className={classes['suggestions-title']}>
+                    <span>Suggestions for you</span>
+                    <span onClick={toggleSeeAll}>See All</span>
+                  </div>
+                ) : null}
               </div>
               <div className={classes.suggestions}>
-                <SuggestedProfile />
-                <SuggestedProfile />
-                <SuggestedProfile />
-                <SuggestedProfile />
-                <SuggestedProfile />
+                {suggestions.map((suggestion) => (
+                  <SuggestedProfile key={suggestion._id} {...suggestion} />
+                ))}
               </div>
             </SidebarCard>
           </div>

@@ -1,6 +1,14 @@
 import React from 'react';
+import { useAuth } from '../../context/auth/auth-context';
 import classes from './Post.module.css';
-const Post = () => {
+const Post = ({
+  content,
+  likes: { dislikedBy, likeCount, likedBy },
+  username,
+}) => {
+  const { user } = useAuth();
+  const likedByUser = likedBy.includes(user.username);
+
   return (
     <article className={classes.post}>
       <div className={classes.header}>
@@ -9,7 +17,7 @@ const Post = () => {
           src="https://pbs.twimg.com/profile_images/1220285531164233729/A98RISKc_200x200.jpg"
           alt="medium avatar"
         />
-        <span className={classes.title}>amar_narute</span>
+        <span className={classes.title}>{username}</span>
         <svg
           className={`w-6 h-6 ${classes.options}`}
           fill="white"
@@ -37,13 +45,14 @@ const Post = () => {
         <button>
           <svg
             className="w-6 h-6"
-            fill="transparent"
+            fill={likedByUser ? 'red' : 'transparent'}
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               fillRule="evenodd"
               stroke="white"
+              strokeWidth={likedByUser ? '0' : '1'}
               d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
               clipRule="evenodd"
             />

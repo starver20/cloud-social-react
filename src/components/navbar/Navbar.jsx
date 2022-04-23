@@ -2,15 +2,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import cloud from '../../assets/cloud.png';
 import { useAuth } from '../../context/auth/auth-context';
+import { useUser } from '../../context/user/user-context';
 
 const Navbar = ({ page = 'home' }) => {
   const { user, logout } = useAuth();
+  const { userDispatch } = useUser();
   const navigate = useNavigate();
 
   const authClickHandler = (e) => {
     // If user is logged in, then log him out and clear the wishlist and cart
     if (user) {
-      // clear all context data
+      userDispatch({ type: 'CLEAR_DATA' });
       logout();
       return;
     }
@@ -142,18 +144,7 @@ const Navbar = ({ page = 'home' }) => {
                     </div>
                   </div>
                 </>
-              ) : (
-                <>
-                  {page !== 'auth' && (
-                    <button
-                      onClick={authClickHandler}
-                      className={`nav--action__login ${classes.action}`}
-                    >
-                      LOGIN
-                    </button>
-                  )}
-                </>
-              )}
+              ) : null}
             </div>
           </div>
         </nav>
