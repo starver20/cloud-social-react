@@ -58,7 +58,9 @@ const Dashboard = () => {
           <div className={classes.timeline}>
             <NewPost />
             {followingPosts.length > 0 ? (
-              followingPosts.map((post) => <Post key={post.id} {...post} />)
+              followingPosts.map((post) => (
+                <Post key={post.id} {...post} isUserPost={false} />
+              ))
             ) : (
               <h1 className={classes.nopost}>
                 Follow people to see what they post!

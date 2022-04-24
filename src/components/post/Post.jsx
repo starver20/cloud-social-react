@@ -1,13 +1,27 @@
 import React from 'react';
 import { useAuth } from '../../context/auth/auth-context';
 import classes from './Post.module.css';
+import { useUser } from '../../context/user/user-context';
+import { useAsync } from '../../hooks/useAsync';
+import { unfollowUserService } from '../../utils/user-utils';
+
 const Post = ({
   content,
   likes: { dislikedBy, likeCount, likedBy },
   username,
+  isUserPost = false,
 }) => {
   const { user } = useAuth();
   const likedByUser = likedBy.includes(user.username);
+  const { userDispatch, allUsers } = useUser();
+
+  const postUser = allUsers.find((user) => user.username === username);
+
+  const { callAsyncFunction: unfollowUser, loading } = useAsync(
+    unfollowUserService,
+    userDispatch,
+    postUser._id
+  );
 
   return (
     <article className={classes.post}>
@@ -18,14 +32,28 @@ const Post = ({
           alt="medium avatar"
         />
         <span className={classes.title}>{username}</span>
-        <svg
-          className={`w-6 h-6 ${classes.options}`}
-          fill="white"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-        </svg>
+        <div className={classes['options-container']}>
+          <svg
+            className={`w-6 h-6 ${classes.options}`}
+            fill="white"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+          </svg>
+          <div className={classes['post-options']}>
+            {isUserPost ? (
+              <>
+                <button className={classes.option}>Edit</button>
+                <button className={classes.option}>Delete</button>
+              </>
+            ) : (
+              <button onClick={unfollowUser} className={classes.option}>
+                Unfollow
+              </button>
+            )}
+          </div>
+        </div>
       </div>
       {/* <div className={classes.img}>
         <img

@@ -133,11 +133,15 @@ const Navbar = ({ page = 'home' }) => {
                     </Link>
                     <div className={classes['profile-options']}>
                       <Link to="/profile">
-                        <button className="nav--action__login">Profile</button>
+                        <button
+                          className={`nav--action__login ${classes.option}`}
+                        >
+                          Profile
+                        </button>
                       </Link>
                       <button
                         onClick={authClickHandler}
-                        className="nav--action__login"
+                        className={`nav--action__login ${classes.option}`}
                       >
                         Logout
                       </button>

@@ -17,14 +17,12 @@
 
 .title {
   cursor: pointer;
-  font-size: var(--body-2);
+  font-size: var(--body-1);
   color: white;
 }
 
 .options {
-  margin-left: auto;
   width: 2rem;
-  cursor: pointer;
 }
 
 .img {
@@ -42,7 +40,7 @@
 .content {
   margin-top: 1rem;
   color: white;
-  font-size: var(--body-3);
+  font-size: var(--body-2);
 }
 
 .actions {
@@ -67,4 +65,40 @@
 
 .actions > button:hover {
   background-color: var(--grey-light-color);
+}
+
+.options-container {
+  cursor: pointer;
+  margin-left: auto;
+  position: relative;
+}
+
+.post-options {
+  position: absolute;
+  padding: 0.5rem;
+  border-radius: var(--radius-3);
+  background-color: var(--inactive);
+  right: 0;
+  top: 1.5rem;
+  display: none;
+  box-shadow: rgba(126, 125, 125, 0.24) 0px 3px 8px;
+}
+
+.option {
+  font-size: var(--body-3);
+  padding: 5px 1rem;
+  border-radius: var(--radius-3);
+  font-weight: 600;
+  border: none;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+}
+
+.option:hover {
+  background-color: var(--grey-light-color);
+}
+
+.options-container:hover > .post-options {
+  display: block;
 }

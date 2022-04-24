@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './NewPost.module.css';
+import { Modal } from '../modal/Modal';
 
 const NewPost = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleShowModal = () => setShowModal((prevState) => !prevState);
+
   return (
     <div className={classes['new-post']}>
       <div className={classes.container}>
@@ -11,6 +16,7 @@ const NewPost = () => {
           alt="medium avatar"
         />
         <textarea
+          onClick={toggleShowModal}
           className={classes.content}
           type="text"
           rows={3}
@@ -21,6 +27,7 @@ const NewPost = () => {
         <div className={classes.media}></div>
         <button className={classes.post}>Publish</button>
       </div>
+      {showModal && <Modal onClick={toggleShowModal}>Amar</Modal>}
     </div>
   );
 };
