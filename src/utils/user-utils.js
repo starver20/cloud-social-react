@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export const followUserService = async (
   userDispatch,
@@ -14,7 +15,12 @@ export const followUserService = async (
     }
   );
 
+  console.log(response);
+
   if (response.status === 200) {
+    toast.success(
+      `Following ${response.data.user.following.reverse()[0].username}.`
+    );
     userDispatch({
       type: 'UPDATE_FOLLOWING',
       payload: { following: response.data.user.following },
@@ -37,6 +43,7 @@ export const unfollowUserService = async (
   );
 
   if (response.status === 200) {
+    toast.success(`Unfollowed successfully.`);
     userDispatch({
       type: 'UPDATE_FOLLOWING',
       payload: { following: response.data.user.following },
@@ -54,6 +61,7 @@ export const deletePostService = async (
     headers: { authorization: jwt },
   });
   if (response.status === 201) {
+    toast.success(`Post deleted successfully.`);
     userDispatch({
       type: 'UPDATE_POSTS',
       payload: { posts: response.data.posts },
@@ -73,6 +81,7 @@ export const createPostService = async (userDispatch, navigate, data, jwt) => {
   );
 
   if (response.status === 201) {
+    toast.success(`Post created successfully.`);
     userDispatch({
       type: 'UPDATE_POSTS',
       payload: { posts: response.data.posts },
@@ -91,6 +100,7 @@ export const editPostService = async (userDispatch, navigate, data, jwt) => {
     }
   );
   if (response.status === 201) {
+    toast.success(`Post edited successfully.`);
     userDispatch({
       type: 'UPDATE_POSTS',
       payload: { posts: response.data.posts },
