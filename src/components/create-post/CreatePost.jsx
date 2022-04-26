@@ -58,7 +58,11 @@ const CreatePost = ({
       </div>
       <div className={classes.actions}>
         <div className={classes.media}></div>
-        <button onClick={actionClickHandler} className={classes.post}>
+        <button
+          onClick={actionClickHandler}
+          className={classes.post}
+          disabled={postContent === ''}
+        >
           {isEditing ? 'Save' : 'Publish'}
         </button>
       </div>
