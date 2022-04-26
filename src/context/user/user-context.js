@@ -9,7 +9,7 @@ const initialState = {
   allPosts: [],
   allUsers: [],
   userPosts: [],
-  followingPosts: [],
+  // followingPosts: [],
   userDispatch: () => {},
 };
 
@@ -35,9 +35,6 @@ const userReducer = (state, action) => {
         followers,
         following,
         userPosts: posts.filter((post) => post.username === username),
-        followingPosts: posts.filter((post) =>
-          followingUsernames.includes(post.username)
-        ),
         allPosts: posts,
         allUsers,
       };
@@ -49,9 +46,13 @@ const userReducer = (state, action) => {
       return {
         ...state,
         following: action.payload.following,
-        followingPosts: state.allPosts.filter((post) =>
-          followingUsernames.includes(post.username)
-        ),
+      };
+    }
+
+    case 'UPDATE_POSTS': {
+      return {
+        ...state,
+        allPosts: action.payload.posts,
       };
     }
 

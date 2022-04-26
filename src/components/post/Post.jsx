@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../context/auth/auth-context';
 import classes from './Post.module.css';
 import { useUser } from '../../context/user/user-context';
 import { useAsync } from '../../hooks/useAsync';
-import { unfollowUserService } from '../../utils/user-utils';
+import { unfollowUserService, deletePostService } from '../../utils/user-utils';
+import { Modal } from '../modal/Modal';
+import CreatePost from '../create-post/CreatePost';
 
 const Post = ({
   content,
   likes: { dislikedBy, likeCount, likedBy },
   username,
   isUserPost = false,
+  _id,
 }) => {
   const { user } = useAuth();
   const likedByUser = likedBy.includes(user.username);
@@ -17,11 +20,21 @@ const Post = ({
 
   const postUser = allUsers.find((user) => user.username === username);
 
-  const { callAsyncFunction: unfollowUser, loading } = useAsync(
+  const { callAsyncFunction: unfollowUser, unfollowLoading } = useAsync(
     unfollowUserService,
     userDispatch,
     postUser._id
   );
+
+  const { callAsyncFunction: deletePost, deletePostLoading } = useAsync(
+    deletePostService,
+    userDispatch,
+    _id
+  );
+
+  // Editing post
+  const [showModal, setShowModal] = useState(false);
+  const toggleShowModal = () => setShowModal((prevState) => !prevState);
 
   return (
     <article className={classes.post}>
@@ -44,8 +57,12 @@ const Post = ({
           <div className={classes['post-options']}>
             {isUserPost ? (
               <>
-                <button className={classes.option}>Edit</button>
-                <button className={classes.option}>Delete</button>
+                <button onClick={toggleShowModal} className={classes.option}>
+                  Edit
+                </button>
+                <button onClick={deletePost} className={classes.option}>
+                  Delete
+                </button>
               </>
             ) : (
               <button onClick={unfollowUser} className={classes.option}>
@@ -62,12 +79,7 @@ const Post = ({
         />
       </div> */}
       <div className={classes.content}>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Error aliquam
-          odio deserunt dolores assumenda ea consectetur excepturi qui tenetur.
-          Nam eligendi, dignissimos fugit officia quas dolorum maiores delectus
-          corporis eos.
-        </p>
+        <p>{content}</p>
       </div>
       <div className={classes.actions}>
         <button>
@@ -115,6 +127,17 @@ const Post = ({
           </svg>
         </button>
       </div>
+
+      {showModal && (
+        <Modal onClick={toggleShowModal}>
+          <CreatePost
+            isEditing={true}
+            content={content}
+            postId={_id}
+            closeModal={toggleShowModal}
+          />
+        </Modal>
+      )}
     </article>
   );
 };

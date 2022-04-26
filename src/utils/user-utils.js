@@ -43,3 +43,57 @@ export const unfollowUserService = async (
     });
   }
 };
+
+export const deletePostService = async (
+  userDispatch,
+  navigate,
+  postId,
+  jwt
+) => {
+  const response = await axios.delete(`/api/posts/${postId}`, {
+    headers: { authorization: jwt },
+  });
+  if (response.status === 201) {
+    userDispatch({
+      type: 'UPDATE_POSTS',
+      payload: { posts: response.data.posts },
+    });
+  }
+};
+
+export const createPostService = async (userDispatch, navigate, data, jwt) => {
+  const response = await axios.post(
+    `/api/posts`,
+    {
+      postData: { content: data.content },
+    },
+    {
+      headers: { authorization: jwt },
+    }
+  );
+
+  if (response.status === 201) {
+    userDispatch({
+      type: 'UPDATE_POSTS',
+      payload: { posts: response.data.posts },
+    });
+  }
+};
+
+export const editPostService = async (userDispatch, navigate, data, jwt) => {
+  const response = await axios.post(
+    `/api/posts/edit/${data.postId}`,
+    {
+      postData: { content: data.content },
+    },
+    {
+      headers: { authorization: jwt },
+    }
+  );
+  if (response.status === 201) {
+    userDispatch({
+      type: 'UPDATE_POSTS',
+      payload: { posts: response.data.posts },
+    });
+  }
+};

@@ -93,6 +93,8 @@
   background-color: transparent;
   color: white;
   cursor: pointer;
+  width: 100%;
+  text-align: left;
 }
 
 .option:hover {

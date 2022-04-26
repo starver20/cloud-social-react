@@ -11,12 +11,11 @@
 .modal {
   position: fixed;
   top: 15vh;
-  left: 5%;
-  width: 90%;
+  left: 25%;
+  width: 45%;
   background-color: var(--background-color);
   padding: 1rem;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-2);
   z-index: 30;
   animation: slide-down 300ms ease-out forwards;
 }
