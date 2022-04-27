@@ -15,8 +15,6 @@ export const followUserService = async (
     }
   );
 
-  console.log(response);
-
   if (response.status === 200) {
     toast.success(
       `Following ${response.data.user.following.reverse()[0].username}.`
@@ -43,7 +41,7 @@ export const unfollowUserService = async (
   );
 
   if (response.status === 200) {
-    toast.success(`Unfollowed successfully.`);
+    toast.success('Unfollowed successfully.');
     userDispatch({
       type: 'UPDATE_FOLLOWING',
       payload: { following: response.data.user.following },
@@ -61,7 +59,7 @@ export const deletePostService = async (
     headers: { authorization: jwt },
   });
   if (response.status === 201) {
-    toast.success(`Post deleted successfully.`);
+    toast.success('Post deleted successfully.');
     userDispatch({
       type: 'UPDATE_POSTS',
       payload: { posts: response.data.posts },
@@ -81,7 +79,7 @@ export const createPostService = async (userDispatch, navigate, data, jwt) => {
   );
 
   if (response.status === 201) {
-    toast.success(`Post created successfully.`);
+    toast.success('Post created successfully.');
     userDispatch({
       type: 'UPDATE_POSTS',
       payload: { posts: response.data.posts },
@@ -100,10 +98,93 @@ export const editPostService = async (userDispatch, navigate, data, jwt) => {
     }
   );
   if (response.status === 201) {
-    toast.success(`Post edited successfully.`);
+    toast.success('Post edited successfully.');
     userDispatch({
       type: 'UPDATE_POSTS',
       payload: { posts: response.data.posts },
+    });
+  }
+};
+
+export const likePostService = async (userDispatch, navigate, postId, jwt) => {
+  const response = await axios.post(
+    `/api/posts/like/${postId}`,
+    {},
+    {
+      headers: { authorization: jwt },
+    }
+  );
+  if (response.status === 201) {
+    toast.success('Post liked successfully.');
+    userDispatch({
+      type: 'UPDATE_POSTS',
+      payload: { posts: response.data.posts },
+    });
+  }
+};
+
+export const unlikePostService = async (
+  userDispatch,
+  navigate,
+  postId,
+  jwt
+) => {
+  const response = await axios.post(
+    `/api/posts/dislike/${postId}`,
+    {},
+    {
+      headers: { authorization: jwt },
+    }
+  );
+  if (response.status === 201) {
+    toast.success('Post unliked successfully.');
+    userDispatch({
+      type: 'UPDATE_POSTS',
+      payload: { posts: response.data.posts },
+    });
+  }
+};
+
+export const bookmarkPostService = async (
+  userDispatch,
+  navigate,
+  postId,
+  jwt
+) => {
+  const response = await axios.post(
+    `/api/users/bookmark/${postId}`,
+    {},
+    {
+      headers: { authorization: jwt },
+    }
+  );
+  if (response.status === 200) {
+    toast.success('Added to bookmarks.');
+    userDispatch({
+      type: 'UPDATE_BOOKMARKS',
+      payload: { bookmarks: response.data.bookmarks },
+    });
+  }
+};
+
+export const unbookmarkPostService = async (
+  userDispatch,
+  navigate,
+  postId,
+  jwt
+) => {
+  const response = await axios.post(
+    `/api/users/remove-bookmark/${postId}`,
+    {},
+    {
+      headers: { authorization: jwt },
+    }
+  );
+  if (response.status === 200) {
+    toast.success('Removed from bookmarks.');
+    userDispatch({
+      type: 'UPDATE_BOOKMARKS',
+      payload: { bookmarks: response.data.bookmarks },
     });
   }
 };

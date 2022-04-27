@@ -9,6 +9,7 @@ const initialState = {
   allPosts: [],
   allUsers: [],
   userPosts: [],
+  bookmarks: [],
   // followingPosts: [],
   userDispatch: () => {},
 };
@@ -53,6 +54,12 @@ const userReducer = (state, action) => {
       return {
         ...state,
         allPosts: action.payload.posts,
+      };
+    }
+    case 'UPDATE_BOOKMARKS': {
+      return {
+        ...state,
+        bookmarks: action.payload.bookmarks,
       };
     }
 

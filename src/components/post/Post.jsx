@@ -3,7 +3,14 @@ import { useAuth } from '../../context/auth/auth-context';
 import classes from './Post.module.css';
 import { useUser } from '../../context/user/user-context';
 import { useAsync } from '../../hooks/useAsync';
-import { unfollowUserService, deletePostService } from '../../utils/user-utils';
+import {
+  unfollowUserService,
+  deletePostService,
+  likePostService,
+  unlikePostService,
+  bookmarkPostService,
+  unbookmarkPostService,
+} from '../../utils/user-utils';
 import { Modal } from '../modal/Modal';
 import CreatePost from '../create-post/CreatePost';
 
@@ -15,8 +22,13 @@ const Post = ({
   _id,
 }) => {
   const { user } = useAuth();
-  const likedByUser = likedBy.includes(user.username);
-  const { userDispatch, allUsers } = useUser();
+  const { userDispatch, allUsers, bookmarks } = useUser();
+
+  const isLikedByUser = likedBy.some(
+    (likedByUser) => user.user.username === likedByUser.username
+  );
+
+  const isBookmarked = bookmarks.includes(_id);
 
   const postUser = allUsers.find((user) => user.username === username);
 
@@ -31,6 +43,48 @@ const Post = ({
     userDispatch,
     _id
   );
+
+  const { callAsyncFunction: likePost, likePostLoading } = useAsync(
+    likePostService,
+    userDispatch,
+    _id
+  );
+
+  const { callAsyncFunction: unlikePost, unlikePostLoading } = useAsync(
+    unlikePostService,
+    userDispatch,
+    _id
+  );
+
+  const { callAsyncFunction: bookmarkPost, bookmarkPostLoading } = useAsync(
+    bookmarkPostService,
+    userDispatch,
+    _id
+  );
+
+  const { callAsyncFunction: unbookmarkPost, unbookmarkPostLoading } = useAsync(
+    unbookmarkPostService,
+    userDispatch,
+    _id
+  );
+
+  // Like/Unlike Post
+  const likeClickHandler = () => {
+    if (!isLikedByUser) {
+      likePost();
+    } else {
+      unlikePost();
+    }
+  };
+
+  // bookmark post
+  const bookmarkClickHandler = () => {
+    if (!isBookmarked) {
+      bookmarkPost();
+    } else {
+      unbookmarkPost();
+    }
+  };
 
   // Editing post
   const [showModal, setShowModal] = useState(false);
@@ -82,17 +136,20 @@ const Post = ({
         <p>{content}</p>
       </div>
       <div className={classes.actions}>
-        <button>
+        <button
+          onClick={likeClickHandler}
+          disabled={likePostLoading || unlikePostLoading}
+        >
           <svg
             className="w-6 h-6"
-            fill={likedByUser ? 'red' : 'transparent'}
+            fill={isLikedByUser ? 'red' : 'transparent'}
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               fillRule="evenodd"
               stroke="white"
-              strokeWidth={likedByUser ? '0' : '1'}
+              strokeWidth={isLikedByUser ? '0' : '1'}
               d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
               clipRule="evenodd"
             />
@@ -113,15 +170,16 @@ const Post = ({
             />
           </svg>
         </button>
-        <button>
+        <button onClick={bookmarkClickHandler}>
           <svg
             className="w-6 h-6"
-            fill="transparent"
+            fill={isBookmarked ? 'white' : 'transparent'}
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               stroke="white"
+              strokeWidth={isBookmarked ? '0' : '1'}
               d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"
             />
           </svg>
