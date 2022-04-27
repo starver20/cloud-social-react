@@ -6,8 +6,10 @@ import { useUser } from '../../context/user/user-context';
 
 const Navbar = ({ page = 'home' }) => {
   const { user, logout } = useAuth();
-  const { userDispatch } = useUser();
+  const { userDispatch, bookmarks } = useUser();
   const navigate = useNavigate();
+
+  let isBookmarked = bookmarks?.length > 0;
 
   const authClickHandler = (e) => {
     // If user is logged in, then log him out and clear the wishlist and cart
@@ -68,7 +70,8 @@ const Navbar = ({ page = 'home' }) => {
             <div className="nav-action">
               {user ? (
                 <>
-                  <div className="nav-icon">
+                  {/* Search */}
+                  {/* <div className="nav-icon">
                     <svg
                       className="w-6 h-6"
                       fill="white"
@@ -81,19 +84,24 @@ const Navbar = ({ page = 'home' }) => {
                         clipRule="evenodd"
                       />
                     </svg>
-                  </div>
+                  </div> */}
                   <div className="nav-icon">
                     <Link to={'/'}>
                       <svg
                         className="w-6 h-6"
-                        fill="white"
+                        fill={isBookmarked ? 'white' : 'none'}
                         viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+                        <path
+                          stroke="white"
+                          strokeWidth={isBookmarked ? '0' : '1'}
+                          d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"
+                        />
                       </svg>
-
-                      <span className="icon-number">{6}</span>
+                      {isBookmarked ? (
+                        <span className="icon-number">{bookmarks.length}</span>
+                      ) : null}
                     </Link>
                   </div>
                   {/* <div className="nav-icon">

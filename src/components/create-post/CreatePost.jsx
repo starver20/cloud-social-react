@@ -33,7 +33,9 @@ const CreatePost = ({
     if (!isEditing) {
       createPost();
     } else {
-      editPost();
+      if (!postContent === content) {
+        editPost();
+      }
       closeModal();
     }
     setPostContent('');
@@ -49,6 +51,7 @@ const CreatePost = ({
         />
         <textarea
           className={classes.content}
+          style={{ height: `${isEditing ? '25rem' : '15rem'}` }}
           type="text"
           rows={10}
           placeholder="What's on your mind today?"
@@ -57,6 +60,7 @@ const CreatePost = ({
         />
       </div>
       <div className={classes.actions}>
+        {/* Image upload */}
         <div className={classes.media}></div>
         <button
           onClick={actionClickHandler}

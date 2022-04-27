@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useAuth } from '../../context/auth/auth-context';
 import classes from './Post.module.css';
 import { useUser } from '../../context/user/user-context';
 import { useAsync } from '../../hooks/useAsync';
+import { Link } from 'react-router-dom';
 import {
   unfollowUserService,
   deletePostService,
@@ -28,9 +29,12 @@ const Post = ({
     (likedByUser) => user.user.username === likedByUser.username
   );
 
-  const isBookmarked = bookmarks.includes(_id);
+  console.log(bookmarks);
+  const isBookmarked = bookmarks?.includes(_id);
 
   const postUser = allUsers.find((user) => user.username === username);
+
+  const commentRef = useRef(null);
 
   const { callAsyncFunction: unfollowUser, unfollowLoading } = useAsync(
     unfollowUserService,
@@ -155,7 +159,11 @@ const Post = ({
             />
           </svg>
         </button>
-        <button>
+        <button
+          onClick={() => {
+            commentRef.current.focus();
+          }}
+        >
           <svg
             className="w-6 h-6"
             fill="transparent"
@@ -184,6 +192,22 @@ const Post = ({
             />
           </svg>
         </button>
+      </div>
+      <div className={classes.likes}>
+        {likedBy.length > 0 ? (
+          <p>
+            Liked by
+            <Link to={`/p/${likedBy[0].username}`} className={classes.user}>
+              {' '}
+              {likedBy[0].username}{' '}
+            </Link>
+            {likedBy.length > 1 ? likedBy.length - 1 : ''} and others
+          </p>
+        ) : null}
+      </div>
+      <div className={classes.comment}>
+        <input ref={commentRef} placeholder="Add a comment." type="text" />
+        <button className={classes['post-btn']}>Post</button>
       </div>
 
       {showModal && (

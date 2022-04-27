@@ -104,3 +104,38 @@
 .options-container:hover > .post-options {
   display: block;
 }
+
+.comment {
+  display: flex;
+}
+
+.comment input {
+  width: 100%;
+  line-height: 3rem;
+  background-color: var(--card-background-color);
+  border: none;
+  outline: none;
+  color: white;
+  font-size: var(--body-2);
+}
+
+.post-btn {
+  background-color: var(--primary-color);
+  border: none;
+  padding: 5px 1rem;
+  border-radius: var(--radius-2);
+  color: white;
+  font-size: var(--body-2);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.likes p {
+  font-size: var(--body-3);
+  color: white;
+  margin: 1rem 0;
+}
+
+.user {
+  color: var(--primary-color);
+}
