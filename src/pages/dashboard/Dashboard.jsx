@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import classes from './Dashboard.module.css';
-import NewPost from '../../components/new-post/NewPost';
+import CreatePost from '../../components/create-post/CreatePost';
 import SidebarCard from '../../components/card/sidebar-card/SidebarCard';
 import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
 import Post from '../../components/post/Post';
@@ -18,8 +18,10 @@ const Dashboard = () => {
     },
     logout,
   } = useAuth();
-  const { userDispatch, followingPosts, allUsers, following } = useUser();
+  const { userDispatch, allPosts, allUsers, following } = useUser();
   const navigate = useNavigate();
+  const { getFollowingUsernames } = useManipulators();
+  const [seeAll, setSeeAll] = useState(false);
 
   const authClickHandler = (e) => {
     // If user is logged in, then log him out and clear the wishlist and cart or else navigate to login
@@ -31,13 +33,14 @@ const Dashboard = () => {
     navigate('/login');
   };
 
-  const [seeAll, setSeeAll] = useState(false);
-
-  const { getFollowingUsernames } = useManipulators();
-
   const toggleSeeAll = () => setSeeAll((prevState) => !prevState);
 
   const followingUsernames = getFollowingUsernames(following);
+
+  const followingPosts = allPosts.filter(
+    (post) =>
+      followingUsernames.includes(post.username) || post.username === username
+  );
 
   const suggestions = allUsers
     ?.filter(
@@ -56,9 +59,17 @@ const Dashboard = () => {
             <SidebarCard />
           </div> */}
           <div className={classes.timeline}>
-            <NewPost />
+            <CreatePost />
             {followingPosts.length > 0 ? (
-              followingPosts.map((post) => <Post key={post.id} {...post} />)
+              followingPosts
+                .reverse()
+                .map((post) => (
+                  <Post
+                    key={post.id}
+                    {...post}
+                    isUserPost={post.username === username}
+                  />
+                ))
             ) : (
               <h1 className={classes.nopost}>
                 Follow people to see what they post!
@@ -74,7 +85,7 @@ const Dashboard = () => {
                     src="https://pbs.twimg.com/profile_images/1220285531164233729/A98RISKc_200x200.jpg"
                     alt="medium avatar"
                   />
-                  <span className={classes.username}>amar_narute</span>
+                  <span className={classes.username}>{username}</span>
                 </div>
                 <button onClick={authClickHandler} className={classes.action}>
                   Logout

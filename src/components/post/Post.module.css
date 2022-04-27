@@ -17,14 +17,12 @@
 
 .title {
   cursor: pointer;
-  font-size: var(--body-2);
+  font-size: var(--body-1);
   color: white;
 }
 
 .options {
-  margin-left: auto;
   width: 2rem;
-  cursor: pointer;
 }
 
 .img {
@@ -42,7 +40,7 @@
 .content {
   margin-top: 1rem;
   color: white;
-  font-size: var(--body-3);
+  font-size: var(--body-2);
 }
 
 .actions {
@@ -67,4 +65,77 @@
 
 .actions > button:hover {
   background-color: var(--grey-light-color);
+}
+
+.options-container {
+  cursor: pointer;
+  margin-left: auto;
+  position: relative;
+}
+
+.post-options {
+  position: absolute;
+  padding: 0.5rem;
+  border-radius: var(--radius-3);
+  background-color: var(--inactive);
+  right: 0;
+  top: 1.5rem;
+  display: none;
+  box-shadow: rgba(126, 125, 125, 0.24) 0px 3px 8px;
+}
+
+.option {
+  font-size: var(--body-3);
+  padding: 5px 1rem;
+  border-radius: var(--radius-3);
+  font-weight: 600;
+  border: none;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.option:hover {
+  background-color: var(--grey-light-color);
+}
+
+.options-container:hover > .post-options {
+  display: block;
+}
+
+.comment {
+  display: flex;
+}
+
+.comment input {
+  width: 100%;
+  line-height: 3rem;
+  background-color: var(--card-background-color);
+  border: none;
+  outline: none;
+  color: white;
+  font-size: var(--body-2);
+}
+
+.post-btn {
+  background-color: var(--primary-color);
+  border: none;
+  padding: 5px 1rem;
+  border-radius: var(--radius-2);
+  color: white;
+  font-size: var(--body-2);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.likes p {
+  font-size: var(--body-3);
+  color: white;
+  margin: 1rem 0;
+}
+
+.user {
+  color: var(--primary-color);
 }

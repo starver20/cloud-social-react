@@ -20,6 +20,7 @@
   background-color: var(--inactive);
   right: 0;
   display: none;
+  box-shadow: rgba(126, 125, 125, 0.24) 0px 3px 8px;
 }
 
 .options-container:hover > .profile-options {
@@ -30,6 +31,14 @@
   text-align: left;
   font-size: var(--body-3);
   width: 100%;
+}
+
+.option {
+  background-color: var(--inactive);
+}
+
+.option:hover {
+  background-color: var(--grey-light-color);
 }
 
 .search-list {
