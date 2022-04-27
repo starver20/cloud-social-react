@@ -1,6 +1,8 @@
 import { Response } from 'miragejs';
 import dayjs from 'dayjs';
 import jwt_decode from 'jwt-decode';
+var relativeTime = require('dayjs/plugin/relativeTime');
+dayjs.extend(relativeTime);
 
 export const requiresAuth = function (request) {
   const encodedToken = request.requestHeaders.authorization;
@@ -19,4 +21,4 @@ export const requiresAuth = function (request) {
   );
 };
 
-export const formatDate = () => dayjs().format('YYYY-MM-DDTHH:mm:ssZ');
+export const formatDate = () => dayjs('2022-02-01').fromNow();

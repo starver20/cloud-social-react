@@ -138,4 +138,39 @@
 
 .user {
   color: var(--primary-color);
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.user-comment {
+  color: white;
+  font-size: var(--body-3);
+  max-width: 100%;
+  /* white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; */
+  word-break: break-all;
+}
+
+.comments {
+  margin: 1rem 0;
+}
+
+.all-comments {
+  color: var(--grey-light-color);
+  text-decoration: none;
+  font-size: var(--body-4);
+}
+
+.action-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.action-container p {
+  color: var(--grey-light-color);
+  font-size: var(--body-4);
+  font-weight: bold;
 }

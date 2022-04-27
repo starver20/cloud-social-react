@@ -78,7 +78,6 @@ export const createPostHandler = function (schema, request) {
       );
     }
     const { postData } = JSON.parse(request.requestBody);
-    console.log(postData);
     const post = {
       _id: uuid(),
       ...postData,
@@ -86,6 +85,10 @@ export const createPostHandler = function (schema, request) {
         likeCount: 0,
         likedBy: [],
         dislikedBy: [],
+      },
+      comment: {
+        commentCount: 0,
+        comments: [],
       },
       username: user.username,
       createdAt: formatDate(),
@@ -283,6 +286,89 @@ export const deletePostHandler = function (schema, request) {
       );
     }
     this.db.posts.remove({ _id: postId });
+    return new Response(201, {}, { posts: this.db.posts });
+  } catch (error) {
+    return new Response(
+      500,
+      {},
+      {
+        error,
+      }
+    );
+  }
+};
+
+/**
+ * This handler handles commenting on a post in the db.
+ * send POST Request at /api/posts/comment/:postId
+ *
+ * */
+export const addCommentHandler = function (schema, request) {
+  const user = requiresAuth.call(this, request);
+  try {
+    if (!user) {
+      return new Response(
+        404,
+        {},
+        {
+          errors: [
+            'The username you entered is not Registered. Not Found error',
+          ],
+        }
+      );
+    }
+    const postId = request.params.postId;
+    const post = schema.posts.findBy({ _id: postId }).attrs;
+    const { comment } = JSON.parse(request.requestBody);
+    post.comment.commentCount += 1;
+    const newComment = {
+      _id: uuid(),
+      comment,
+      userId: user._id,
+      username: user.username,
+    };
+    post.comment.comments.push(newComment);
+    this.db.posts.update({ _id: postId }, { ...post, updatedAt: formatDate() });
+    return new Response(201, {}, { posts: this.db.posts });
+  } catch (error) {
+    return new Response(
+      500,
+      {},
+      {
+        error,
+      }
+    );
+  }
+};
+
+/**
+ * This handler handles deleting a post in the db.
+ * send DELETE Request at /api/user/posts/:postId/:commentId
+ * */
+
+export const deleteCommentHandler = function (schema, request) {
+  const user = requiresAuth.call(this, request);
+  try {
+    if (!user) {
+      return new Response(
+        404,
+        {},
+        {
+          errors: [
+            'The username you entered is not Registered. Not Found error',
+          ],
+        }
+      );
+    }
+    const postId = request.params.postId;
+    const commentId = request.params.commentId;
+    let post = schema.posts.findBy({ _id: postId }).attrs;
+    let comment = { ...post.comment };
+    let commentsArray = comment.comments.filter((c) => c._id !== commentId);
+    comment.commentCount -= 1;
+    comment = { ...comment, comments: commentsArray };
+    post = { ...post, comment };
+    this.db.posts.update({ _id: postId }, post);
     return new Response(201, {}, { posts: this.db.posts });
   } catch (error) {
     return new Response(
