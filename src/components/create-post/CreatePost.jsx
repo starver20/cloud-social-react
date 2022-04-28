@@ -33,7 +33,7 @@ const CreatePost = ({
     if (!isEditing) {
       createPost();
     } else {
-      if (!postContent === content) {
+      if (postContent !== content) {
         editPost();
       }
       closeModal();

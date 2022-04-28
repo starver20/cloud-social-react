@@ -188,3 +188,26 @@ export const unbookmarkPostService = async (
     });
   }
 };
+
+export const addCommentService = async (
+  userDispatch,
+  navigate,
+  commentData,
+  jwt
+) => {
+  const response = await axios.post(
+    `/api/posts/comment/${commentData.postId}`,
+    { comment: commentData.comment },
+    {
+      headers: { authorization: jwt },
+    }
+  );
+
+  if (response.status === 201) {
+    toast.success('Comment added successfully');
+    userDispatch({
+      type: 'UPDATE_POSTS',
+      payload: { posts: response.data.posts },
+    });
+  }
+};

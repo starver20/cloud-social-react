@@ -11,16 +11,19 @@ import {
   unlikePostService,
   bookmarkPostService,
   unbookmarkPostService,
+  addCommentService,
 } from '../../utils/user-utils';
 import { Modal } from '../modal/Modal';
 import CreatePost from '../create-post/CreatePost';
 
 const Post = ({
+  comment,
   content,
   likes: { dislikedBy, likeCount, likedBy },
   username,
   isUserPost = false,
   _id,
+  createdAt,
 }) => {
   const { user } = useAuth();
   const { userDispatch, allUsers, bookmarks } = useUser();
@@ -29,12 +32,15 @@ const Post = ({
     (likedByUser) => user.user.username === likedByUser.username
   );
 
-  console.log(bookmarks);
   const isBookmarked = bookmarks?.includes(_id);
 
   const postUser = allUsers.find((user) => user.username === username);
 
   const commentRef = useRef(null);
+
+  const [commentInput, setCommentInput] = useState('');
+
+  const commentData = { comment: commentInput, postId: _id };
 
   const { callAsyncFunction: unfollowUser, unfollowLoading } = useAsync(
     unfollowUserService,
@@ -71,6 +77,24 @@ const Post = ({
     userDispatch,
     _id
   );
+
+  const { callAsyncFunction: addComment, addCommentLoading } = useAsync(
+    addCommentService,
+    userDispatch,
+    commentData
+  );
+
+  // Comments
+  const commentChangeHandler = (e) => {
+    setCommentInput(e.target.value);
+  };
+
+  const addCommentHandler = () => {
+    if (commentInput !== '') {
+      addComment();
+      setCommentInput('');
+    }
+  };
 
   // Like/Unlike Post
   const likeClickHandler = () => {
@@ -139,75 +163,103 @@ const Post = ({
       <div className={classes.content}>
         <p>{content}</p>
       </div>
-      <div className={classes.actions}>
-        <button
-          onClick={likeClickHandler}
-          disabled={likePostLoading || unlikePostLoading}
-        >
-          <svg
-            className="w-6 h-6"
-            fill={isLikedByUser ? 'red' : 'transparent'}
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
+      <div className={classes['action-container']}>
+        <div className={classes.actions}>
+          <button
+            onClick={likeClickHandler}
+            disabled={likePostLoading || unlikePostLoading}
           >
-            <path
-              fillRule="evenodd"
-              stroke="white"
-              strokeWidth={isLikedByUser ? '0' : '1'}
-              d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-        <button
-          onClick={() => {
-            commentRef.current.focus();
-          }}
-        >
-          <svg
-            className="w-6 h-6"
-            fill="transparent"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
+            <svg
+              className="w-6 h-6"
+              fill={isLikedByUser ? 'red' : 'transparent'}
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                stroke="white"
+                strokeWidth={isLikedByUser ? '0' : '1'}
+                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={() => {
+              commentRef.current.focus();
+            }}
           >
-            <path
-              fillRule="evenodd"
-              stroke="white"
-              d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-        <button onClick={bookmarkClickHandler}>
-          <svg
-            className="w-6 h-6"
-            fill={isBookmarked ? 'white' : 'transparent'}
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke="white"
-              strokeWidth={isBookmarked ? '0' : '1'}
-              d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"
-            />
-          </svg>
-        </button>
+            <svg
+              className="w-6 h-6"
+              fill="transparent"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                stroke="white"
+                d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+          <button onClick={bookmarkClickHandler}>
+            <svg
+              className="w-6 h-6"
+              fill={isBookmarked ? 'white' : 'transparent'}
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke="white"
+                strokeWidth={isBookmarked ? '0' : '1'}
+                d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"
+              />
+            </svg>
+          </button>
+        </div>
+        <p>{createdAt}</p>
       </div>
       <div className={classes.likes}>
         {likedBy.length > 0 ? (
           <p>
-            Liked by
-            <Link to={`/p/${likedBy[0].username}`} className={classes.user}>
-              {' '}
-              {likedBy[0].username}{' '}
-            </Link>
-            {likedBy.length > 1 ? likedBy.length - 1 : ''} and others
+            Liked by{' '}
+            <Link to={`/p/${likedBy[0].username} `} className={classes.user}>
+              {likedBy[0].username}
+            </Link>{' '}
+            and <span> {likedBy.length > 1 ? likedBy.length - 1 : ' '} </span>
+            others
           </p>
         ) : null}
       </div>
+      <div className={classes.comments}>
+        {comment.comments.length > 0 ? (
+          <>
+            {comment.comments.slice(0, 2).map((comment) => (
+              <p className={classes['user-comment']}>
+                <span className={classes.user}>{comment.username}</span>{' '}
+                {comment.comment}
+              </p>
+            ))}
+            {comment.comments.length > 2 ? (
+              <Link className={classes['all-comments']} to={`post/${_id}`}>
+                View all {comment.comments.length} comments
+              </Link>
+            ) : null}
+          </>
+        ) : null}
+      </div>
       <div className={classes.comment}>
-        <input ref={commentRef} placeholder="Add a comment." type="text" />
-        <button className={classes['post-btn']}>Post</button>
+        <input
+          onChange={commentChangeHandler}
+          ref={commentRef}
+          placeholder="Add a comment."
+          type="text"
+          value={commentInput}
+        />
+        <button onClick={addCommentHandler} className={classes['post-btn']}>
+          Post
+        </button>
       </div>
 
       {showModal && (
