@@ -147,9 +147,6 @@
   color: white;
   font-size: var(--body-3);
   max-width: 100%;
-  /* white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; */
   word-break: break-all;
 }
 

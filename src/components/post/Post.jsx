@@ -92,9 +92,8 @@ const Post = ({
   const addCommentHandler = () => {
     if (commentInput !== '') {
       addComment();
+      setCommentInput('');
     }
-    console.log('here');
-    setCommentInput('');
   };
 
   // Like/Unlike Post
