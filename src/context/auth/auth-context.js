@@ -20,7 +20,9 @@ const useAuth = () => useContext(authContext);
 
 const useProvideAuth = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem('cloudSocialUser'))
+  );
 
   const login = async (body, rememberMe) => {
     let response = await axios.post('/api/auth/login', body);
@@ -28,7 +30,7 @@ const useProvideAuth = () => {
       toast.success('Login successfull.');
       if (rememberMe) {
         localStorage.setItem(
-          'user',
+          'cloudSocialUser',
           JSON.stringify({
             user: response.data.foundUser,
             jwt: response.data.encodedToken,
