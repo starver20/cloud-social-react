@@ -33,6 +33,7 @@ const Navbar = ({ page = 'home' }) => {
             <img className={classes.logo} src={cloud} alt="" />
             <span>CloudSocial</span>
           </Link>
+          {/* Search */}
           {/* <div className="nav-search">
             <div className={classes.search}>
               <input
@@ -140,7 +141,7 @@ const Navbar = ({ page = 'home' }) => {
                       </svg>
                     </Link>
                     <div className={classes['profile-options']}>
-                      <Link to="/profile">
+                      <Link to={`/p/${user.user._id}`}>
                         <button
                           className={`nav--action__login ${classes.option}`}
                         >

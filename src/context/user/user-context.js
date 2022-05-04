@@ -78,18 +78,23 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const initializeData = async () => {
-      let {
-        data: { posts },
-      } = await axios.get('api/posts');
+      try {
+        let {
+          data: { posts },
+        } = await axios.get('/api/posts');
 
-      let {
-        data: { users },
-      } = await axios.get('api/users');
+        let {
+          data: { users },
+        } = await axios.get('/api/users');
+        // If used api/users above, it results in namespace error while reloading on a page whose url contains params
 
-      userDispatch({
-        type: 'INITIALIZE_DATA',
-        data: { user: user ? user : {}, posts, allUsers: users },
-      });
+        userDispatch({
+          type: 'INITIALIZE_DATA',
+          data: { user: user ? user : {}, posts, allUsers: users },
+        });
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     initializeData();

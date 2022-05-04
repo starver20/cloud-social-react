@@ -126,7 +126,9 @@ const Post = ({
           src="https://pbs.twimg.com/profile_images/1220285531164233729/A98RISKc_200x200.jpg"
           alt="medium avatar"
         />
-        <span className={classes.title}>{username}</span>
+        <Link to={`/p/${postUser._id}`} className={classes.title}>
+          {username}
+        </Link>
         <div className={classes['options-container']}>
           <svg
             className={`w-6 h-6 ${classes.options}`}
