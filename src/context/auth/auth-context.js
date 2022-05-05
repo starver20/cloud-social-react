@@ -32,13 +32,19 @@ const useProvideAuth = () => {
         localStorage.setItem(
           'cloudSocialUser',
           JSON.stringify({
-            user: response.data.foundUser,
+            user: {
+              _id: response.data.foundUser._id,
+              username: response.data.foundUser.username,
+            },
             jwt: response.data.encodedToken,
           })
         );
       }
       setUser({
-        user: response.data.foundUser,
+        user: {
+          _id: response.data.foundUser._id,
+          username: response.data.foundUser.username,
+        },
         jwt: response.data.encodedToken,
       });
     }

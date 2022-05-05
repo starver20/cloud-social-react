@@ -255,7 +255,7 @@ const Post = ({
         {likedBy.length > 0 ? (
           <p>
             Liked by{' '}
-            <Link to={`/p/${likedBy[0].username} `} className={classes.user}>
+            <Link to={`/p/${likedBy[0]._id} `} className={classes.user}>
               {likedBy[0].username}
             </Link>{' '}
             and <span> {likedBy.length > 1 ? likedBy.length - 1 : ' '} </span>

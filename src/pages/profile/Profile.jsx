@@ -8,16 +8,29 @@ import { useUser } from '../../context/user/user-context';
 import Post from '../../components/post/Post';
 import { useManipulators } from '../../hooks/useManipulators';
 import { useAuth } from '../../context/auth/auth-context';
-import { unfollowUserService, followUserService } from '../../utils/user-utils';
+import {
+  unfollowUserService,
+  followUserService,
+  editUserProfileService,
+} from '../../utils/user-utils';
 import { useAsync } from '../../hooks/useAsync';
 import { Modal } from '../../components/modal/Modal';
 
 const Profile = () => {
   const [initials, setinitials] = useState('');
+  // user data of current profile
   const [profileUser, setProfileUser] = useState({});
   const [active, setActive] = useState('posts');
+  // current profile posts
   const [userPosts, setUserPosts] = useState([]);
+  // Is loggedin user and current profile user the same?
   const [isAuthUserProfile, setIsAuthUserProfile] = useState(false);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+
+  const [editProfileData, setEditProfileData] = useState({
+    bio: profileUser.bio,
+    portfolioUrl: profileUser.portfolioUrl,
+  });
 
   const { allPosts, following, userDispatch } = useUser();
   const { userId } = useParams();
@@ -43,7 +56,7 @@ const Profile = () => {
       setProfileUser(responseUser);
       setUserPosts(posts);
       // To check if profile belongs to currently logged-in user
-      setIsAuthUserProfile(profileUser._id == authUserId);
+      setIsAuthUserProfile(responseUser._id == authUserId);
     })();
   }, [userId, allPosts]);
 
@@ -59,9 +72,16 @@ const Profile = () => {
     profileUser._id
   );
 
+  const { callAsyncFunction: editUserProfile, editProfileLoading } = useAsync(
+    editUserProfileService,
+    userDispatch,
+    editProfileData
+  );
+
   const actionClickHandler = () => {
     if (isAuthUserProfile) {
       // Edit profile logic
+      toggleEditingProfile();
     } else if (isFollowing) {
       // Unfollow
       unfollowUser();
@@ -69,6 +89,25 @@ const Profile = () => {
       // Follow
       followUser();
     }
+  };
+
+  const saveClickHandler = async () => {
+    toggleEditingProfile();
+    editUserProfile();
+
+    let response = await axios.get(`/api/users/${userId}`);
+    let responseUser = response.data.user;
+    setProfileUser(responseUser);
+    console.log(responseUser);
+
+    setEditProfileData({
+      bio: responseUser.bio,
+      portfolioUrl: responseUser.portfolioUrl,
+    });
+  };
+
+  const toggleEditingProfile = () => {
+    setIsEditingProfile((prev) => !prev);
   };
 
   return (
@@ -90,14 +129,16 @@ const Profile = () => {
                 {profileUser.firstName + ' ' + profileUser.lastName}
               </span>
               <div className={classes['profile-info']}>
-                {profileUser.bio ? <p className={classes.bio}>Bio</p> : null}
-                {profileUser.portfolio ? (
+                {profileUser.bio ? (
+                  <p className={classes.bio}>{profileUser.bio}</p>
+                ) : null}
+                {profileUser.portfolioUrl ? (
                   <a
                     className={classes.portfolio}
-                    href={profileUser.portfolio}
+                    href={profileUser.portfolioUrl}
                     target="_blank"
                   >
-                    Portfolio URL
+                    {profileUser.portfolioUrl}
                   </a>
                 ) : null}
               </div>
@@ -137,6 +178,38 @@ const Profile = () => {
             : null}
         </section>
       </div>
+      {isEditingProfile && (
+        <Modal onClick={toggleEditingProfile}>
+          <div className={classes.edit}>
+            <label htmlFor="">Bio</label>
+            <textarea
+              onChange={(e) => {
+                setEditProfileData((prev) => ({
+                  ...prev,
+                  bio: e.target.value,
+                }));
+              }}
+              value={editProfileData.bio}
+              rows={4}
+              type="text"
+            />
+            <label htmlFor="">Portfolio URL</label>
+            <input
+              onChange={(e) => {
+                setEditProfileData((prev) => ({
+                  ...prev,
+                  portfolioUrl: e.target.value,
+                }));
+              }}
+              value={editProfileData.portfolioUrl}
+              type="text"
+            />
+            <button onClick={saveClickHandler} className={classes.action}>
+              Save
+            </button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

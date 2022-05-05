@@ -212,3 +212,29 @@ export const addCommentService = async (
     });
   }
 };
+export const editUserProfileService = async (
+  userDispatch,
+  navigate,
+  profileData,
+  jwt
+) => {
+  const response = await axios.post(
+    '/api/users/edit',
+    { userData: profileData },
+    {
+      headers: { authorization: jwt },
+    }
+  );
+
+  console.log(response);
+
+  // if (response.status === 201) {
+  //   toast.success('Comment added successfully');
+  //   userDispatch({
+  //     type: 'UPDATE_POSTS',
+  //     payload: { posts: response.data.posts },
+  //   });
+  // }
+};
+
+// /api/users/edit

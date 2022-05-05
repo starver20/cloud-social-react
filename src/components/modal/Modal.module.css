@@ -11,8 +11,8 @@
 .modal {
   position: fixed;
   top: 15vh;
-  left: 25%;
-  width: 45%;
+  left: 30%;
+  width: 35%;
   background-color: var(--background-color);
   padding: 1rem;
   border-radius: var(--radius-2);

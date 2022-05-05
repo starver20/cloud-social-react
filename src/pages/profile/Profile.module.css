@@ -9,9 +9,9 @@
   display: flex;
   justify-content: right;
   align-items: center;
-  gap: 25%;
   width: 50%;
   margin: 0 auto;
+  margin-top: 5rem;
   text-align: center;
 }
 
@@ -27,11 +27,14 @@
 }
 
 .container {
-  margin-top: 2rem;
+  width: 40rem;
+  margin: 0 20rem;
+  word-break: break-all;
 }
 
 .container > button {
   margin-top: 2rem;
+  justify-self: center;
 }
 
 .title {
@@ -92,21 +95,51 @@
 }
 
 .content {
-  width: 50%;
+  width: 30%;
   margin: 0 auto;
   margin-top: 10rem;
 }
 
 .bio {
-  font-size: var(--body-2);
+  margin-top: 1rem;
+  font-size: var(--body-3);
+  font-weight: 600;
 }
 
 .portfolio {
+  text-decoration: underline;
   font-size: var(--body-2);
-  color: aliceblue;
+  font-weight: 700;
+  color: white;
 }
 
-@media (max-width: 1140px) {
+.edit {
+  width: 80%;
+  margin: 0 auto;
+  color: white;
+}
+
+.edit label {
+  font-size: var(--body-1);
+  display: block;
+}
+
+.edit input,
+.edit textarea {
+  width: 100%;
+  margin-bottom: 2rem;
+  outline: none;
+}
+
+.edit input {
+  line-height: 2.5rem;
+}
+
+.edit button {
+  margin-left: calc(100% - 56px);
+}
+
+@media (max-width: 1400px) {
   .img {
     left: 50%;
     transform: translate(-50%);
@@ -117,5 +150,15 @@
     margin-top: 6rem;
     flex-direction: column;
     gap: 2rem;
+  }
+
+  .content {
+    width: 60%;
+  }
+}
+
+@media (max-width: 1080px) {
+  .content {
+    width: 85%;
   }
 }
