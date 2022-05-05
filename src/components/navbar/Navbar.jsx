@@ -69,7 +69,7 @@ const Navbar = ({ page = 'home' }) => {
           </div> */}
           <div className="nav-action-container">
             <div className="nav-action">
-              {user ? (
+              {user?.jwt ? (
                 <>
                   {/* Search */}
                   {/* <div className="nav-icon">

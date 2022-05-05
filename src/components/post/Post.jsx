@@ -45,41 +45,26 @@ const Post = ({
 
   const commentData = { comment: commentInput, postId: _id };
 
-  const { callAsyncFunction: unfollowUser, unfollowLoading } = useAsync(
-    unfollowUserService,
-    userDispatch,
-    postUser._id
-  );
+  const { callAsyncFunction: unfollowUser, loading: unfollowLoading } =
+    useAsync(unfollowUserService, userDispatch, postUser._id);
 
-  const { callAsyncFunction: deletePost, deletePostLoading } = useAsync(
-    deletePostService,
-    userDispatch,
-    _id
-  );
+  const { callAsyncFunction: deletePost, loading: deletePostLoading } =
+    useAsync(deletePostService, userDispatch, _id);
 
-  const { callAsyncFunction: likePost, likePostLoading } = useAsync(
+  const { callAsyncFunction: likePost, loading: likePostLoading } = useAsync(
     likePostService,
     userDispatch,
     _id
   );
 
-  const { callAsyncFunction: unlikePost, unlikePostLoading } = useAsync(
-    unlikePostService,
-    userDispatch,
-    _id
-  );
+  const { callAsyncFunction: unlikePost, loading: unlikePostLoading } =
+    useAsync(unlikePostService, userDispatch, _id);
 
-  const { callAsyncFunction: bookmarkPost, bookmarkPostLoading } = useAsync(
-    bookmarkPostService,
-    userDispatch,
-    _id
-  );
+  const { callAsyncFunction: bookmarkPost, loading: bookmarkPostLoading } =
+    useAsync(bookmarkPostService, userDispatch, _id);
 
-  const { callAsyncFunction: unbookmarkPost, unbookmarkPostLoading } = useAsync(
-    unbookmarkPostService,
-    userDispatch,
-    _id
-  );
+  const { callAsyncFunction: unbookmarkPost, loading: unbookmarkPostLoading } =
+    useAsync(unbookmarkPostService, userDispatch, _id);
 
   const { callAsyncFunction: addComment, addCommentLoading } = useAsync(
     addCommentService,

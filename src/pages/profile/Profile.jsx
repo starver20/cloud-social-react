@@ -15,6 +15,8 @@ import {
 } from '../../utils/user-utils';
 import { useAsync } from '../../hooks/useAsync';
 import { Modal } from '../../components/modal/Modal';
+import ProfilesCard from '../../components/card/profiles-card/ProfilesCard';
+import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
 
 const Profile = () => {
   const [initials, setinitials] = useState('');
@@ -58,25 +60,19 @@ const Profile = () => {
       // To check if profile belongs to currently logged-in user
       setIsAuthUserProfile(responseUser._id == authUserId);
     })();
-  }, [userId, allPosts]);
+  }, [userId, allPosts, following]);
 
-  const { callAsyncFunction: unfollowUser, unfollowLoading } = useAsync(
-    unfollowUserService,
-    userDispatch,
-    profileUser._id
-  );
+  const { callAsyncFunction: unfollowUser, loading: unfollowLoading } =
+    useAsync(unfollowUserService, userDispatch, profileUser._id);
 
-  const { callAsyncFunction: followUser, followLoading } = useAsync(
+  const { callAsyncFunction: followUser, loading: followLoading } = useAsync(
     followUserService,
     userDispatch,
     profileUser._id
   );
 
-  const { callAsyncFunction: editUserProfile, editProfileLoading } = useAsync(
-    editUserProfileService,
-    userDispatch,
-    editProfileData
-  );
+  const { callAsyncFunction: editUserProfile, loading: editProfileLoading } =
+    useAsync(editUserProfileService, userDispatch, editProfileData);
 
   const actionClickHandler = () => {
     if (isAuthUserProfile) {
@@ -144,10 +140,18 @@ const Profile = () => {
               </div>
             </div>
             <div className={classes.tabs}>
-              <span className={classes.tab}>{`${
-                profileUser?.followers?.length
-              } ${userPosts.length > 1 ? 'Followers' : 'Follower'}`}</span>
               <span
+                onClick={() => {
+                  setActive('followers');
+                }}
+                className={classes.tab}
+              >{`${profileUser?.followers?.length} ${
+                userPosts.length > 1 ? 'Followers' : 'Follower'
+              }`}</span>
+              <span
+                onClick={() => {
+                  setActive('following');
+                }}
                 className={classes.tab}
               >{`${profileUser?.following?.length} Following`}</span>
               <span className={classes.tab}>{`${userPosts.length} ${
@@ -155,7 +159,11 @@ const Profile = () => {
               }`}</span>
             </div>
           </div>
-          <button onClick={actionClickHandler} className={classes.action}>
+          <button
+            onClick={actionClickHandler}
+            className={classes.action}
+            disabled={unfollowLoading || followLoading}
+          >
             {isAuthUserProfile
               ? 'Edit Profile'
               : isFollowing
@@ -210,6 +218,40 @@ const Profile = () => {
           </div>
         </Modal>
       )}
+      {active === 'followers' && profileUser.followers.length > 0 ? (
+        <Modal
+          onClick={() => {
+            setActive('');
+          }}
+        >
+          <ProfilesCard>
+            <div className={classes.suggestions}>
+              {profileUser.followers.map((suggestion) => (
+                <SuggestedProfile key={suggestion._id} {...suggestion} />
+              ))}
+            </div>
+          </ProfilesCard>
+        </Modal>
+      ) : null}
+      {active === 'following' && profileUser.following.length > 0 ? (
+        <Modal
+          onClick={() => {
+            setActive('');
+          }}
+        >
+          <ProfilesCard>
+            <div className={classes.suggestions}>
+              {profileUser.following.map((suggestion) => (
+                <SuggestedProfile
+                  key={suggestion._id}
+                  isFollowing={true}
+                  {...suggestion}
+                />
+              ))}
+            </div>
+          </ProfilesCard>
+        </Modal>
+      ) : null}
     </div>
   );
 };

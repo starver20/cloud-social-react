@@ -1,18 +1,31 @@
 import React from 'react';
 import classes from './SuggestedProfile.module.css';
 import { useAsync } from '../../hooks/useAsync';
-import { followUserService } from '../../utils/user-utils';
+import { followUserService, unfollowUserService } from '../../utils/user-utils';
 import { useUser } from '../../context/user/user-context';
 import { Link } from 'react-router-dom';
 
-const SuggestedProfile = ({ username, _id }) => {
+const SuggestedProfile = ({ username, _id, isFollowing }) => {
   const { userDispatch } = useUser();
 
-  const { callAsyncFunction: followUser, loading } = useAsync(
+  console.log(isFollowing);
+
+  const { callAsyncFunction: followUser, loading: followLoading } = useAsync(
     followUserService,
     userDispatch,
     _id
   );
+
+  const { callAsyncFunction: unfollowUser, loading: unfollowLoading } =
+    useAsync(unfollowUserService, userDispatch, _id);
+
+  const clickHandler = () => {
+    if (isFollowing) {
+      unfollowUser();
+    } else {
+      followUser();
+    }
+  };
 
   return (
     <>
@@ -29,11 +42,11 @@ const SuggestedProfile = ({ username, _id }) => {
         </div>
 
         <button
-          onClick={followUser}
+          onClick={clickHandler}
           className={classes.action}
-          disabled={loading}
+          disabled={followLoading || unfollowLoading}
         >
-          Follow
+          {isFollowing ? 'Unfollow' : 'Follow'}
         </button>
       </div>
     </>

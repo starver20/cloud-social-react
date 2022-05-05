@@ -66,10 +66,9 @@ const userReducer = (state, action) => {
 };
 
 const UserProvider = ({ children }) => {
-  const {
-    user: { user },
-    jwt,
-  } = useAuth();
+  const { user } = useAuth();
+  console.log(user);
+  // const { user: { user = {} } = {}, jwt } = useAuth();
   const [userState, userDispatch] = useReducer(userReducer, initialState);
   const value = { ...userState, userDispatch };
 
@@ -85,18 +84,21 @@ const UserProvider = ({ children }) => {
         } = await axios.get('/api/users');
         // If used api/users above, it results in namespace error while reloading on a page whose url contains params
 
-        let {
-          data: { user: responseUser },
-        } = await axios.get(`/api/users/${user._id}`);
+        console.log(user?.jwt);
+        if (user?.jwt) {
+          let {
+            data: { user: responseUser },
+          } = await axios.get(`/api/users/${user?.user._id}`);
 
-        userDispatch({
-          type: 'INITIALIZE_DATA',
-          data: {
-            user: responseUser ? responseUser : {},
-            posts,
-            allUsers: users,
-          },
-        });
+          userDispatch({
+            type: 'INITIALIZE_DATA',
+            data: {
+              user: responseUser ? responseUser : {},
+              posts,
+              allUsers: users,
+            },
+          });
+        }
       } catch (err) {
         console.log(err);
       }
