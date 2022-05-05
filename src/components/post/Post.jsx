@@ -12,6 +12,7 @@ import {
   bookmarkPostService,
   unbookmarkPostService,
   addCommentService,
+  followUserService,
 } from '../../utils/user-utils';
 import { Modal } from '../modal/Modal';
 import CreatePost from '../create-post/CreatePost';
@@ -24,7 +25,9 @@ const Post = ({
   isUserPost = false,
   _id,
   createdAt,
+  isFollowing = false,
 }) => {
+  //
   const { user } = useAuth();
   const { userDispatch, allUsers, bookmarks } = useUser();
 
@@ -84,6 +87,12 @@ const Post = ({
     commentData
   );
 
+  const { callAsyncFunction: followUser, followLoading } = useAsync(
+    followUserService,
+    userDispatch,
+    postUser._id
+  );
+
   // Comments
   const commentChangeHandler = (e) => {
     setCommentInput(e.target.value);
@@ -102,6 +111,15 @@ const Post = ({
       likePost();
     } else {
       unlikePost();
+    }
+  };
+
+  // follow/ unfollow Posr
+  const followClickHandler = () => {
+    if (!isFollowing) {
+      followUser();
+    } else {
+      unfollowUser();
     }
   };
 
@@ -144,13 +162,21 @@ const Post = ({
                 <button onClick={toggleShowModal} className={classes.option}>
                   Edit
                 </button>
-                <button onClick={deletePost} className={classes.option}>
+                <button
+                  onClick={deletePost}
+                  className={classes.option}
+                  disabled={deletePostLoading}
+                >
                   Delete
                 </button>
               </>
             ) : (
-              <button onClick={unfollowUser} className={classes.option}>
-                Unfollow
+              <button
+                onClick={followClickHandler}
+                className={classes.option}
+                disabled={unfollowLoading || followLoading}
+              >
+                {isFollowing ? 'Unfollow' : 'Follow'}
               </button>
             )}
           </div>
@@ -205,7 +231,10 @@ const Post = ({
               />
             </svg>
           </button>
-          <button onClick={bookmarkClickHandler}>
+          <button
+            onClick={bookmarkClickHandler}
+            disabled={bookmarkPostLoading || unbookmarkPostLoading}
+          >
             <svg
               className="w-6 h-6"
               fill={isBookmarked ? 'white' : 'transparent'}
@@ -259,7 +288,11 @@ const Post = ({
           type="text"
           value={commentInput}
         />
-        <button onClick={addCommentHandler} className={classes['post-btn']}>
+        <button
+          onClick={addCommentHandler}
+          className={classes['post-btn']}
+          disabled={addCommentLoading}
+        >
           Post
         </button>
       </div>

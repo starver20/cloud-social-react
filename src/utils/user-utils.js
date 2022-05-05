@@ -7,6 +7,7 @@ export const followUserService = async (
   userId,
   jwt
 ) => {
+  console.log(userId);
   const response = await axios.post(
     `/api/users/follow/${userId}`,
     {},

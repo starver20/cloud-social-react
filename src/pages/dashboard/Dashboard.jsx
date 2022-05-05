@@ -13,27 +13,18 @@ import { useManipulators } from '../../hooks/useManipulators';
 const Dashboard = () => {
   const {
     user: {
-      user: { username },
+      user: { username, _id: userId },
       jwt,
     },
     logout,
   } = useAuth();
-  const { userDispatch, allPosts, allUsers, following } = useUser();
-  const navigate = useNavigate();
-  const { getFollowingUsernames } = useManipulators();
+  console.log(userId);
+
   const [seeAll, setSeeAll] = useState(false);
 
-  const authClickHandler = (e) => {
-    // If user is logged in, then log him out and clear the wishlist and cart or else navigate to login
-    if (jwt) {
-      userDispatch({ type: 'CLEAR_DATA' });
-      logout();
-      return;
-    }
-    navigate('/login');
-  };
-
-  const toggleSeeAll = () => setSeeAll((prevState) => !prevState);
+  const { userDispatch, allPosts, allUsers, following } = useUser();
+  const navigate = useNavigate();
+  const { getFollowingUsernames, isFollowingUser } = useManipulators();
 
   const followingUsernames = getFollowingUsernames(following);
 
@@ -49,6 +40,22 @@ const Dashboard = () => {
         otherUser.username !== username
     )
     .slice(0, seeAll ? allUsers.length : 5);
+
+  let isFollowing = isFollowingUser(following, userId);
+
+  // HANDLERS
+
+  const authClickHandler = (e) => {
+    // If user is logged in, then log him out and clear the wishlist and cart or else navigate to login
+    if (jwt) {
+      userDispatch({ type: 'CLEAR_DATA' });
+      logout();
+      return;
+    }
+    navigate('/login');
+  };
+
+  const toggleSeeAll = () => setSeeAll((prevState) => !prevState);
 
   return (
     <div>
@@ -67,6 +74,7 @@ const Dashboard = () => {
                   <Post
                     key={post.id}
                     {...post}
+                    isFollowing={isFollowing}
                     isUserPost={post.username === username}
                   />
                 ))
