@@ -3,16 +3,18 @@ import classes from './CreatePost.module.css';
 import { createPostService, editPostService } from '../../utils/user-utils';
 import { useAsync } from '../../hooks/useAsync';
 import { useUser } from '../../context/user/user-context';
-import axios from 'axios';
+import Chip from '../chip/Chip';
+
 const CreatePost = ({
   closeModal,
   isEditing = false,
   content = '',
   postId,
+  url = '',
 }) => {
   const [postContent, setPostContent] = useState(content);
   const [image, setImage] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState(url);
   const [deleteImageToken, setDeleteImageToken] = useState('');
 
   const imageInputRef = useRef();
@@ -32,19 +34,21 @@ const CreatePost = ({
     data
   );
 
+  const deleteImage = async () => {
+    let res = await fetch(
+      `https://api.cloudinary.com/v1_1/dq81bdilo/delete_by_token/?token=${deleteImageToken}`,
+      {
+        method: 'POST',
+      }
+    );
+    setDeleteImageToken('');
+    setImage('');
+  };
+
   const imageChangeHandler = async (e) => {
     // If user selects any other image, delete previous selected image from cloudinary
-    if (deleteImageToken !== '') {
-      console.log(deleteImageToken);
-      let res = await fetch(
-        `https://api.cloudinary.com/v1_1/dq81bdilo/delete_by_token/?token=${deleteImageToken}`,
-        {
-          method: 'POST',
-          // token: image.delete_token,
-        }
-      );
-      let data = await res.json();
-      console.log(data);
+    if (deleteImageToken !== '' && !isEditing) {
+      await deleteImage();
     }
 
     let imageToUpload = e.target.files[0];
@@ -61,7 +65,6 @@ const CreatePost = ({
       }
     );
     const data = await res.json();
-    console.log(data);
     setDeleteImageToken(data.delete_token);
     setImageUrl(data.url);
   };
@@ -81,6 +84,8 @@ const CreatePost = ({
       }
       closeModal();
     }
+    setImage('');
+    setDeleteImageToken('');
     setPostContent('');
   };
 
@@ -112,20 +117,24 @@ const CreatePost = ({
           name=""
           id=""
         />
-        <div onClick={addImageHandler} className={classes.media}>
-          <svg
-            className="w-6 h-6"
-            fill="white"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-              clipRule="evenodd"
-            />
-          </svg>
+        <div className={classes['chip-container']}>
+          <div onClick={addImageHandler} className={classes.media}>
+            <svg
+              className="w-6 h-6"
+              fill="white"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          {image !== '' && <Chip title={image.name} deleteChip={deleteImage} />}
         </div>
+
         <button
           onClick={actionClickHandler}
           className={classes.post}

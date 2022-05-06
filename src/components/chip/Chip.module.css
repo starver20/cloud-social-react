@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap');
+.chip {
+  font-family: 'Roboto', sans-serif;
+  padding: 0.2rem 0.5rem;
+  background-color: #e0e0e0;
+  width: fit-content;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  margin: 4px;
+  max-width: 15rem;
+  height: 3rem;
+  overflow: hidden;
+}
+
+.chip:hover {
+  background-color: #b9b9b9;
+}
+
+.title {
+  padding: 5px;
+  max-width: 75%;
+  max-height: 100%;
+  margin-right: 0.2rem;
+  font-size: var(--body-2);
+}
+
+.close {
+  width: 1.2rem;
+  cursor: pointer;
+}

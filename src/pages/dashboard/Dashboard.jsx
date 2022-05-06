@@ -23,7 +23,7 @@ const Dashboard = () => {
 
   const { userDispatch, allPosts, allUsers, following } = useUser();
   const navigate = useNavigate();
-  const { getFollowingUsernames, isFollowingUser } = useManipulators();
+  const { getFollowingUsernames } = useManipulators();
 
   const followingUsernames = getFollowingUsernames(following);
 
@@ -39,8 +39,6 @@ const Dashboard = () => {
         otherUser.username !== username
     )
     .slice(0, seeAll ? allUsers.length : 5);
-
-  let isFollowing = isFollowingUser(following, userId);
 
   // HANDLERS
 
@@ -73,7 +71,7 @@ const Dashboard = () => {
                   <Post
                     key={post.id}
                     {...post}
-                    isFollowing={isFollowing}
+                    isFollowing={true}
                     isUserPost={post.username === username}
                   />
                 ))

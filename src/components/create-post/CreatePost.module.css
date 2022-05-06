@@ -39,6 +39,7 @@ textarea {
 .actions {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .post {
@@ -50,4 +51,9 @@ textarea {
   font-size: var(--body-2);
   font-weight: 600;
   cursor: pointer;
+}
+
+.chip-container {
+  display: flex;
+  align-items: center;
 }

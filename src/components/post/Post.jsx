@@ -287,6 +287,7 @@ const Post = ({
           <CreatePost
             isEditing={true}
             content={content}
+            url={url}
             postId={_id}
             closeModal={toggleShowModal}
           />
