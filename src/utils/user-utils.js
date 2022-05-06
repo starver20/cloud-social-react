@@ -71,12 +71,14 @@ export const createPostService = async (userDispatch, navigate, data, jwt) => {
   const response = await axios.post(
     `/api/posts`,
     {
-      postData: { content: data.content },
+      postData: { content: data.content, url: data.url },
     },
     {
       headers: { authorization: jwt },
     }
   );
+
+  console.log(response);
 
   if (response.status === 201) {
     toast.success('Post created successfully.');
