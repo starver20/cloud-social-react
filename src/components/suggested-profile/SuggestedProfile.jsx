@@ -8,8 +8,6 @@ import { Link } from 'react-router-dom';
 const SuggestedProfile = ({ username, _id, isFollowing }) => {
   const { userDispatch } = useUser();
 
-  console.log(isFollowing);
-
   const { callAsyncFunction: followUser, loading: followLoading } = useAsync(
     followUserService,
     userDispatch,

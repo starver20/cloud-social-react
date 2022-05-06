@@ -7,7 +7,6 @@ export const followUserService = async (
   userId,
   jwt
 ) => {
-  console.log(userId);
   const response = await axios.post(
     `/api/users/follow/${userId}`,
     {},
@@ -225,16 +224,4 @@ export const editUserProfileService = async (
       headers: { authorization: jwt },
     }
   );
-
-  console.log(response);
-
-  // if (response.status === 201) {
-  //   toast.success('Comment added successfully');
-  //   userDispatch({
-  //     type: 'UPDATE_POSTS',
-  //     payload: { posts: response.data.posts },
-  //   });
-  // }
 };
-
-// /api/users/edit

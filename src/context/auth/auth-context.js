@@ -55,7 +55,6 @@ const useProvideAuth = () => {
     const response = await axios.post('/api/auth/signup', body);
     if (response.status === 201) {
       toast.success('Signup successfull.');
-      console.log(response.data.encodedToken);
       setUser({
         user: response.data.createdUser,
         jwt: response.data.encodedToken,

@@ -67,7 +67,6 @@ const userReducer = (state, action) => {
 
 const UserProvider = ({ children }) => {
   const { user } = useAuth();
-  console.log(user);
   // const { user: { user = {} } = {}, jwt } = useAuth();
   const [userState, userDispatch] = useReducer(userReducer, initialState);
   const value = { ...userState, userDispatch };
@@ -84,7 +83,6 @@ const UserProvider = ({ children }) => {
         } = await axios.get('/api/users');
         // If used api/users above, it results in namespace error while reloading on a page whose url contains params
 
-        console.log(user?.jwt);
         if (user?.jwt) {
           let {
             data: { user: responseUser },

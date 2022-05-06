@@ -4,8 +4,6 @@ import { useAuth } from '../../context/auth/auth-context';
 
 const RequiresAuth = ({ children }) => {
   const { user } = useAuth();
-  console.log(user);
-
   const location = useLocation();
 
   return user?.jwt ? (

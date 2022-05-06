@@ -94,7 +94,6 @@ const Profile = () => {
     let response = await axios.get(`/api/users/${userId}`);
     let responseUser = response.data.user;
     setProfileUser(responseUser);
-    console.log(responseUser);
 
     setEditProfileData({
       bio: responseUser.bio,

@@ -18,7 +18,6 @@ const Dashboard = () => {
     },
     logout,
   } = useAuth();
-  console.log(userId);
 
   const [seeAll, setSeeAll] = useState(false);
 

@@ -244,7 +244,6 @@ export const followUserHandler = function (schema, request) {
       { user: updatedUser, followUser: updatedFollowUser }
     );
   } catch (error) {
-    console.log(error);
     return new Response(
       500,
       {},
