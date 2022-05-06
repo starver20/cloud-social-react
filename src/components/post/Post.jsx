@@ -12,6 +12,7 @@ import {
   bookmarkPostService,
   unbookmarkPostService,
   addCommentService,
+  followUserService,
 } from '../../utils/user-utils';
 import { Modal } from '../modal/Modal';
 import CreatePost from '../create-post/CreatePost';
@@ -24,7 +25,9 @@ const Post = ({
   isUserPost = false,
   _id,
   createdAt,
+  isFollowing = false,
 }) => {
+  //
   const { user } = useAuth();
   const { userDispatch, allUsers, bookmarks } = useUser();
 
@@ -42,46 +45,37 @@ const Post = ({
 
   const commentData = { comment: commentInput, postId: _id };
 
-  const { callAsyncFunction: unfollowUser, unfollowLoading } = useAsync(
-    unfollowUserService,
-    userDispatch,
-    postUser._id
-  );
+  const { callAsyncFunction: unfollowUser, loading: unfollowLoading } =
+    useAsync(unfollowUserService, userDispatch, postUser._id);
 
-  const { callAsyncFunction: deletePost, deletePostLoading } = useAsync(
-    deletePostService,
-    userDispatch,
-    _id
-  );
+  const { callAsyncFunction: deletePost, loading: deletePostLoading } =
+    useAsync(deletePostService, userDispatch, _id);
 
-  const { callAsyncFunction: likePost, likePostLoading } = useAsync(
+  const { callAsyncFunction: likePost, loading: likePostLoading } = useAsync(
     likePostService,
     userDispatch,
     _id
   );
 
-  const { callAsyncFunction: unlikePost, unlikePostLoading } = useAsync(
-    unlikePostService,
-    userDispatch,
-    _id
-  );
+  const { callAsyncFunction: unlikePost, loading: unlikePostLoading } =
+    useAsync(unlikePostService, userDispatch, _id);
 
-  const { callAsyncFunction: bookmarkPost, bookmarkPostLoading } = useAsync(
-    bookmarkPostService,
-    userDispatch,
-    _id
-  );
+  const { callAsyncFunction: bookmarkPost, loading: bookmarkPostLoading } =
+    useAsync(bookmarkPostService, userDispatch, _id);
 
-  const { callAsyncFunction: unbookmarkPost, unbookmarkPostLoading } = useAsync(
-    unbookmarkPostService,
-    userDispatch,
-    _id
-  );
+  const { callAsyncFunction: unbookmarkPost, loading: unbookmarkPostLoading } =
+    useAsync(unbookmarkPostService, userDispatch, _id);
 
   const { callAsyncFunction: addComment, addCommentLoading } = useAsync(
     addCommentService,
     userDispatch,
     commentData
+  );
+
+  const { callAsyncFunction: followUser, followLoading } = useAsync(
+    followUserService,
+    userDispatch,
+    postUser._id
   );
 
   // Comments
@@ -102,6 +96,15 @@ const Post = ({
       likePost();
     } else {
       unlikePost();
+    }
+  };
+
+  // follow/ unfollow Posr
+  const followClickHandler = () => {
+    if (!isFollowing) {
+      followUser();
+    } else {
+      unfollowUser();
     }
   };
 
@@ -126,7 +129,9 @@ const Post = ({
           src="https://pbs.twimg.com/profile_images/1220285531164233729/A98RISKc_200x200.jpg"
           alt="medium avatar"
         />
-        <span className={classes.title}>{username}</span>
+        <Link to={`/p/${postUser._id}`} className={classes.title}>
+          {username}
+        </Link>
         <div className={classes['options-container']}>
           <svg
             className={`w-6 h-6 ${classes.options}`}
@@ -142,13 +147,21 @@ const Post = ({
                 <button onClick={toggleShowModal} className={classes.option}>
                   Edit
                 </button>
-                <button onClick={deletePost} className={classes.option}>
+                <button
+                  onClick={deletePost}
+                  className={classes.option}
+                  disabled={deletePostLoading}
+                >
                   Delete
                 </button>
               </>
             ) : (
-              <button onClick={unfollowUser} className={classes.option}>
-                Unfollow
+              <button
+                onClick={followClickHandler}
+                className={classes.option}
+                disabled={unfollowLoading || followLoading}
+              >
+                {isFollowing ? 'Unfollow' : 'Follow'}
               </button>
             )}
           </div>
@@ -203,7 +216,10 @@ const Post = ({
               />
             </svg>
           </button>
-          <button onClick={bookmarkClickHandler}>
+          <button
+            onClick={bookmarkClickHandler}
+            disabled={bookmarkPostLoading || unbookmarkPostLoading}
+          >
             <svg
               className="w-6 h-6"
               fill={isBookmarked ? 'white' : 'transparent'}
@@ -224,7 +240,7 @@ const Post = ({
         {likedBy.length > 0 ? (
           <p>
             Liked by{' '}
-            <Link to={`/p/${likedBy[0].username} `} className={classes.user}>
+            <Link to={`/p/${likedBy[0]._id} `} className={classes.user}>
               {likedBy[0].username}
             </Link>{' '}
             and <span> {likedBy.length > 1 ? likedBy.length - 1 : ' '} </span>
@@ -257,7 +273,11 @@ const Post = ({
           type="text"
           value={commentInput}
         />
-        <button onClick={addCommentHandler} className={classes['post-btn']}>
+        <button
+          onClick={addCommentHandler}
+          className={classes['post-btn']}
+          disabled={addCommentLoading}
+        >
           Post
         </button>
       </div>

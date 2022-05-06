@@ -32,13 +32,19 @@ const useProvideAuth = () => {
         localStorage.setItem(
           'cloudSocialUser',
           JSON.stringify({
-            user: response.data.foundUser,
+            user: {
+              _id: response.data.foundUser._id,
+              username: response.data.foundUser.username,
+            },
             jwt: response.data.encodedToken,
           })
         );
       }
       setUser({
-        user: response.data.foundUser,
+        user: {
+          _id: response.data.foundUser._id,
+          username: response.data.foundUser.username,
+        },
         jwt: response.data.encodedToken,
       });
     }
@@ -60,7 +66,7 @@ const useProvideAuth = () => {
   const logout = () => {
     toast.success('Logout successfull.');
     localStorage.removeItem('user');
-    setUser(null);
+    setUser({});
     navigate('/');
   };
 

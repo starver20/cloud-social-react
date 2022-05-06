@@ -211,3 +211,17 @@ export const addCommentService = async (
     });
   }
 };
+export const editUserProfileService = async (
+  userDispatch,
+  navigate,
+  profileData,
+  jwt
+) => {
+  const response = await axios.post(
+    '/api/users/edit',
+    { userData: profileData },
+    {
+      headers: { authorization: jwt },
+    }
+  );
+};

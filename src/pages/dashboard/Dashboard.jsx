@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import classes from './Dashboard.module.css';
 import CreatePost from '../../components/create-post/CreatePost';
-import SidebarCard from '../../components/card/sidebar-card/SidebarCard';
+import ProfilesCard from '../../components/card/profiles-card/ProfilesCard';
 import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
 import Post from '../../components/post/Post';
 import { useUser } from '../../context/user/user-context';
@@ -13,27 +13,17 @@ import { useManipulators } from '../../hooks/useManipulators';
 const Dashboard = () => {
   const {
     user: {
-      user: { username },
+      user: { username, _id: userId },
       jwt,
     },
     logout,
   } = useAuth();
-  const { userDispatch, allPosts, allUsers, following } = useUser();
-  const navigate = useNavigate();
-  const { getFollowingUsernames } = useManipulators();
+
   const [seeAll, setSeeAll] = useState(false);
 
-  const authClickHandler = (e) => {
-    // If user is logged in, then log him out and clear the wishlist and cart or else navigate to login
-    if (jwt) {
-      userDispatch({ type: 'CLEAR_DATA' });
-      logout();
-      return;
-    }
-    navigate('/login');
-  };
-
-  const toggleSeeAll = () => setSeeAll((prevState) => !prevState);
+  const { userDispatch, allPosts, allUsers, following } = useUser();
+  const navigate = useNavigate();
+  const { getFollowingUsernames, isFollowingUser } = useManipulators();
 
   const followingUsernames = getFollowingUsernames(following);
 
@@ -50,13 +40,29 @@ const Dashboard = () => {
     )
     .slice(0, seeAll ? allUsers.length : 5);
 
+  let isFollowing = isFollowingUser(following, userId);
+
+  // HANDLERS
+
+  const authClickHandler = (e) => {
+    // If user is logged in, then log him out and clear the wishlist and cart or else navigate to login
+    if (jwt) {
+      userDispatch({ type: 'CLEAR_DATA' });
+      logout();
+      return;
+    }
+    navigate('/login');
+  };
+
+  const toggleSeeAll = () => setSeeAll((prevState) => !prevState);
+
   return (
     <div>
       <Navbar />
       <div className={classes['main-content']}>
         <div className={classes.main}>
           {/* <div className={`${classes['left-sidebar']} ${classes.sidebar}`}>
-            <SidebarCard />
+            <ProfilesCard />
           </div> */}
           <div className={classes.timeline}>
             <CreatePost />
@@ -67,6 +73,7 @@ const Dashboard = () => {
                   <Post
                     key={post.id}
                     {...post}
+                    isFollowing={isFollowing}
                     isUserPost={post.username === username}
                   />
                 ))
@@ -77,7 +84,7 @@ const Dashboard = () => {
             )}
           </div>
           <div className={`${classes['right-sidebar']} ${classes.sidebar}`}>
-            <SidebarCard>
+            <ProfilesCard>
               <div className={classes['sidebar-profile']}>
                 <div className={classes.profile}>
                   <img
@@ -101,10 +108,14 @@ const Dashboard = () => {
               </div>
               <div className={classes.suggestions}>
                 {suggestions.map((suggestion) => (
-                  <SuggestedProfile key={suggestion._id} {...suggestion} />
+                  <SuggestedProfile
+                    key={suggestion._id}
+                    isFollowing={false}
+                    {...suggestion}
+                  />
                 ))}
               </div>
-            </SidebarCard>
+            </ProfilesCard>
           </div>
         </div>
       </div>

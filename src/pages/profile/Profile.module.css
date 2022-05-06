@@ -1,0 +1,164 @@
+.main-content {
+  min-height: calc(100vh - 50px);
+  background-color: var(--light-background-color);
+  color: white;
+  padding-bottom: 4rem;
+}
+
+.section {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 5rem;
+  text-align: center;
+}
+
+.action {
+  background-color: var(--primary-color);
+  border: none;
+  padding: 5px 1rem;
+  border-radius: var(--radius-2);
+  color: white;
+  font-size: var(--body-2);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.container {
+  width: 40rem;
+  margin: 0 20rem;
+  word-break: break-all;
+}
+
+.container > button {
+  margin-top: 2rem;
+  justify-self: center;
+}
+
+.title {
+  font-size: var(--header-3);
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+.hero {
+  height: 20rem;
+  background-color: var(--card-background-color);
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.hero > h1 {
+  font-size: var(--header-3);
+  text-align: center;
+}
+
+.img {
+  width: 14rem;
+  aspect-ratio: 1;
+  background-color: var(--light-background-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid var(--line-light-color);
+  position: absolute;
+  bottom: -30%;
+  left: 25%;
+  cursor: default;
+}
+
+.img span {
+  color: white;
+  font-size: 6rem;
+  font-weight: 700;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+}
+
+.tab {
+  font-size: var(--body-2);
+  color: white;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.content {
+  width: 30%;
+  margin: 0 auto;
+  margin-top: 10rem;
+}
+
+.bio {
+  margin-top: 1rem;
+  font-size: var(--body-3);
+  font-weight: 600;
+}
+
+.portfolio {
+  text-decoration: underline;
+  font-size: var(--body-2);
+  font-weight: 700;
+  color: white;
+}
+
+.edit {
+  width: 80%;
+  margin: 0 auto;
+  color: white;
+}
+
+.edit label {
+  font-size: var(--body-1);
+  display: block;
+}
+
+.edit input,
+.edit textarea {
+  width: 100%;
+  margin-bottom: 2rem;
+  outline: none;
+}
+
+.edit input {
+  line-height: 2.5rem;
+}
+
+.edit button {
+  margin-left: calc(100% - 56px);
+}
+
+@media (max-width: 1400px) {
+  .img {
+    left: 50%;
+    transform: translate(-50%);
+  }
+
+  .section {
+    width: 80%;
+    margin-top: 6rem;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .content {
+    width: 60%;
+  }
+}
+
+@media (max-width: 1080px) {
+  .content {
+    width: 85%;
+  }
+}

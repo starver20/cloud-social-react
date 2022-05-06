@@ -19,6 +19,7 @@
   cursor: pointer;
   font-size: var(--body-1);
   color: white;
+  text-decoration: none;
 }
 
 .options {

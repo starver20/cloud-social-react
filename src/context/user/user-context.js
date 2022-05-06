@@ -22,13 +22,10 @@ const userReducer = (state, action) => {
   switch (action.type) {
     case 'INITIALIZE_DATA': {
       const {
-        user: { user: { bookmarks, followers, following, username } = {} } = {},
+        user: { bookmarks, followers, following, username } = {},
         posts,
         allUsers,
       } = action.data;
-
-      // get array of usernames of users who i am following
-      const followingUsernames = getFollowingUsernames(following);
 
       return {
         ...state,
@@ -41,9 +38,6 @@ const userReducer = (state, action) => {
       };
     }
     case 'UPDATE_FOLLOWING': {
-      const followingUsernames = getFollowingUsernames(
-        action.payload.following
-      );
       return {
         ...state,
         following: action.payload.following,
@@ -73,23 +67,39 @@ const userReducer = (state, action) => {
 
 const UserProvider = ({ children }) => {
   const { user } = useAuth();
+  // const { user: { user = {} } = {}, jwt } = useAuth();
   const [userState, userDispatch] = useReducer(userReducer, initialState);
   const value = { ...userState, userDispatch };
 
   useEffect(() => {
     const initializeData = async () => {
-      let {
-        data: { posts },
-      } = await axios.get('api/posts');
+      try {
+        let {
+          data: { posts },
+        } = await axios.get('/api/posts');
 
-      let {
-        data: { users },
-      } = await axios.get('api/users');
+        let {
+          data: { users },
+        } = await axios.get('/api/users');
+        // If used api/users above, it results in namespace error while reloading on a page whose url contains params
 
-      userDispatch({
-        type: 'INITIALIZE_DATA',
-        data: { user: user ? user : {}, posts, allUsers: users },
-      });
+        if (user?.jwt) {
+          let {
+            data: { user: responseUser },
+          } = await axios.get(`/api/users/${user?.user._id}`);
+
+          userDispatch({
+            type: 'INITIALIZE_DATA',
+            data: {
+              user: responseUser ? responseUser : {},
+              posts,
+              allUsers: users,
+            },
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     initializeData();
