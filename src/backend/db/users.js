@@ -55,6 +55,8 @@ export const users = [
     lastName: 'Balika',
     username: 'adarshbalika',
     password: 'adarshBalika123',
+    displayPicture:
+      'https://res.cloudinary.com/dq81bdilo/image/upload/v1651861631/ktzmi9vuupxnmhu1kdqt.gif',
     followers: [],
     following: [
       {

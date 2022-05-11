@@ -9,6 +9,7 @@ import Post from '../../components/post/Post';
 import { useUser } from '../../context/user/user-context';
 import { useAuth } from '../../context/auth/auth-context';
 import { useManipulators } from '../../hooks/useManipulators';
+import getInitials from '../../utils/getInitials';
 
 const Dashboard = () => {
   const {
@@ -19,9 +20,16 @@ const Dashboard = () => {
     logout,
   } = useAuth();
 
+  const { userDispatch, allPosts, allUsers, following } = useUser();
+
+  const authUser = allUsers.find((curUser) => curUser.username === username);
+
+  const [initials, setinitials] = useState(
+    authUser ? getInitials(authUser.firstName, authUser.lastName) : ''
+  );
+
   const [seeAll, setSeeAll] = useState(false);
 
-  const { userDispatch, allPosts, allUsers, following } = useUser();
   const navigate = useNavigate();
   const { getFollowingUsernames } = useManipulators();
 
@@ -85,12 +93,20 @@ const Dashboard = () => {
             <ProfilesCard>
               <div className={classes['sidebar-profile']}>
                 <div className={classes.profile}>
-                  <img
-                    className={`avatar avatar-md ${classes.profile}`}
-                    src="https://pbs.twimg.com/profile_images/1220285531164233729/A98RISKc_200x200.jpg"
-                    alt="medium avatar"
-                  />
-                  <span className={classes.username}>{username}</span>
+                  <div className={classes.dp}>
+                    {authUser &&
+                      (authUser.displayPicture ? (
+                        <img
+                          className={classes['display-picture']}
+                          src={authUser.displayPicture}
+                        />
+                      ) : (
+                        <span>{initials}</span>
+                      ))}
+                  </div>
+                  <Link to={`/p/${userId}`} className={classes.username}>
+                    {username}
+                  </Link>
                 </div>
                 <button onClick={authClickHandler} className={classes.action}>
                   Logout

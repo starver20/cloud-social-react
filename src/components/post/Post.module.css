@@ -172,3 +172,27 @@
   font-size: var(--body-4);
   font-weight: bold;
 }
+
+.dp {
+  width: 4rem;
+  aspect-ratio: 1;
+  background-color: var(--light-background-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  margin-right: 1rem;
+}
+
+.dp span {
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.display-picture {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}

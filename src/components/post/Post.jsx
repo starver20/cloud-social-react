@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../context/auth/auth-context';
 import classes from './Post.module.css';
 import { useUser } from '../../context/user/user-context';
 import { useAsync } from '../../hooks/useAsync';
 import { Link } from 'react-router-dom';
+import getInitials from '../../utils/getInitials';
 import {
   unfollowUserService,
   deletePostService,
@@ -39,6 +40,10 @@ const Post = ({
   const isBookmarked = bookmarks?.includes(_id);
 
   const postUser = allUsers.find((user) => user.username === username);
+
+  const [initials, setinitials] = useState(
+    getInitials(postUser.firstName, postUser.lastName)
+  );
 
   const commentRef = useRef(null);
 
@@ -125,11 +130,17 @@ const Post = ({
   return (
     <article className={classes.post}>
       <div className={classes.header}>
-        <img
-          className={`avatar avatar-md ${classes.profile}`}
-          src="https://pbs.twimg.com/profile_images/1220285531164233729/A98RISKc_200x200.jpg"
-          alt="medium avatar"
-        />
+        <div className={classes.dp}>
+          {postUser.displayPicture ? (
+            <img
+              className={classes['display-picture']}
+              src={postUser.displayPicture}
+            />
+          ) : (
+            <span>{initials}</span>
+          )}
+        </div>
+
         <Link to={`/p/${postUser._id}`} className={classes.title}>
           {username}
         </Link>
