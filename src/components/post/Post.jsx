@@ -26,6 +26,7 @@ const Post = ({
   _id,
   createdAt,
   isFollowing = false,
+  url = '',
 }) => {
   //
   const { user } = useAuth();
@@ -167,12 +168,11 @@ const Post = ({
           </div>
         </div>
       </div>
-      {/* <div className={classes.img}>
-        <img
-          src="https://icatcare.org/app/uploads/2018/07/Thinking-of-getting-a-cat.png"
-          alt=""
-        />
-      </div> */}
+      {url !== '' && (
+        <div className={classes.img}>
+          <img src={url} alt="" />
+        </div>
+      )}
       <div className={classes.content}>
         <p>{content}</p>
       </div>
@@ -287,6 +287,7 @@ const Post = ({
           <CreatePost
             isEditing={true}
             content={content}
+            url={url}
             postId={_id}
             closeModal={toggleShowModal}
           />

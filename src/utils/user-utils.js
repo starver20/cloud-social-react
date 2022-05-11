@@ -71,7 +71,7 @@ export const createPostService = async (userDispatch, navigate, data, jwt) => {
   const response = await axios.post(
     `/api/posts`,
     {
-      postData: { content: data.content },
+      postData: { content: data.content, url: data.url },
     },
     {
       headers: { authorization: jwt },
@@ -91,7 +91,7 @@ export const editPostService = async (userDispatch, navigate, data, jwt) => {
   const response = await axios.post(
     `/api/posts/edit/${data.postId}`,
     {
-      postData: { content: data.content },
+      postData: { content: data.content, url: data.url },
     },
     {
       headers: { authorization: jwt },

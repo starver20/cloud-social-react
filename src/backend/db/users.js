@@ -98,6 +98,7 @@ export const users = [
     lastName: 'Musk',
     username: 'elonmusk',
     password: 'elonmusk123',
+    bio: 'Badass.',
     followers: [],
     following: [],
     createdAt: formatDate(),
