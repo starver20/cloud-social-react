@@ -26,9 +26,6 @@
 textarea {
   padding: 1rem;
 }
-/* .content::-webkit-scrollbar {
-  display: none;
-} */
 
 .content:active,
 .content:focus {

@@ -18,7 +18,8 @@ const CreatePost = ({
   const [image, setImage] = useState('');
   const [imageUrl, setImageUrl] = useState(url);
   const [deleteImageToken, setDeleteImageToken] = useState('');
-  const { userDispatch, allPosts, allUsers } = useUser();
+  const [uploadingImage, setUploadingImage] = useState(false); //So user can click 'Publish' while image is still being uploaded to cloudinary
+  const { userDispatch, allUsers } = useUser();
 
   const {
     user: { user },
@@ -60,6 +61,8 @@ const CreatePost = ({
 
   const imageChangeHandler = async (e) => {
     // If user selects any other image, delete previous selected image from cloudinary
+
+    setUploadingImage(true);
     if (deleteImageToken !== '' && !isEditing) {
       await deleteImage();
     }
@@ -80,6 +83,7 @@ const CreatePost = ({
     const data = await res.json();
     setDeleteImageToken(data.delete_token);
     setImageUrl(data.url);
+    setUploadingImage(false);
   };
 
   const addImageHandler = () => {
@@ -98,6 +102,7 @@ const CreatePost = ({
       closeModal();
     }
     setImage('');
+    setImageUrl('');
     setDeleteImageToken('');
     setPostContent('');
   };
@@ -157,7 +162,7 @@ const CreatePost = ({
         <button
           onClick={actionClickHandler}
           className={classes.post}
-          disabled={postContent === ''}
+          disabled={postContent === '' || uploadingImage}
         >
           {isEditing ? 'Save' : 'Publish'}
         </button>

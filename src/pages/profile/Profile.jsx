@@ -30,6 +30,7 @@ const Profile = () => {
   const [isAuthUserProfile, setIsAuthUserProfile] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [deleteImageToken, setDeleteImageToken] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const [editProfileData, setEditProfileData] = useState({
     bio: profileUser.bio,
@@ -127,6 +128,7 @@ const Profile = () => {
 
   const imageChangeHandler = async (e) => {
     // If user selects any other image, delete previous selected image from cloudinary
+    setUploadingImage(true);
     if (deleteImageToken !== '' && !isEditing) {
       await deleteImage();
     }
@@ -146,6 +148,7 @@ const Profile = () => {
     const data = await res.json();
     setEditProfileData((prev) => ({ ...prev, displayPicture: data.url }));
     setDeleteImageToken(data.delete_token);
+    setUploadingImage(false);
   };
 
   return (
@@ -300,7 +303,11 @@ const Profile = () => {
               value={editProfileData.portfolioUrl}
               type="text"
             />
-            <button onClick={saveClickHandler} className={classes.action}>
+            <button
+              disabled={uploadingImage}
+              onClick={saveClickHandler}
+              className={classes.action}
+            >
               Save
             </button>
           </div>
