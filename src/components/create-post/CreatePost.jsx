@@ -1,8 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classes from './CreatePost.module.css';
 import { createPostService, editPostService } from '../../utils/user-utils';
 import { useAsync } from '../../hooks/useAsync';
 import { useUser } from '../../context/user/user-context';
+import { useAuth } from '../../context/auth/auth-context';
+import getInitials from '../../utils/getInitials';
 import Chip from '../chip/Chip';
 
 const CreatePost = ({
@@ -16,10 +18,22 @@ const CreatePost = ({
   const [image, setImage] = useState('');
   const [imageUrl, setImageUrl] = useState(url);
   const [deleteImageToken, setDeleteImageToken] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false); //So user can click 'Publish' while image is still being uploaded to cloudinary
+  const { userDispatch, allUsers } = useUser();
+
+  const {
+    user: { user },
+  } = useAuth();
+
+  const authUser = allUsers.find(
+    (curUser) => curUser.username === user.username
+  );
+
+  const [initials, setinitials] = useState(
+    authUser ? getInitials(authUser.firstName, authUser.lastName) : ''
+  );
 
   const imageInputRef = useRef();
-
-  const { userDispatch } = useUser();
 
   let data = { postId, content: postContent, url: imageUrl };
 
@@ -47,6 +61,8 @@ const CreatePost = ({
 
   const imageChangeHandler = async (e) => {
     // If user selects any other image, delete previous selected image from cloudinary
+
+    setUploadingImage(true);
     if (deleteImageToken !== '' && !isEditing) {
       await deleteImage();
     }
@@ -67,6 +83,7 @@ const CreatePost = ({
     const data = await res.json();
     setDeleteImageToken(data.delete_token);
     setImageUrl(data.url);
+    setUploadingImage(false);
   };
 
   const addImageHandler = () => {
@@ -85,6 +102,7 @@ const CreatePost = ({
       closeModal();
     }
     setImage('');
+    setImageUrl('');
     setDeleteImageToken('');
     setPostContent('');
   };
@@ -92,11 +110,17 @@ const CreatePost = ({
   return (
     <div className={classes['new-post']}>
       <div className={classes.container}>
-        <img
-          className={`avatar avatar-md ${classes.profile}`}
-          src="https://pbs.twimg.com/profile_images/1220285531164233729/A98RISKc_200x200.jpg"
-          alt="medium avatar"
-        />
+        <div className={classes.dp}>
+          {authUser &&
+            (authUser.displayPicture ? (
+              <img
+                className={classes['display-picture']}
+                src={authUser.displayPicture}
+              />
+            ) : (
+              <span>{initials}</span>
+            ))}
+        </div>
         <textarea
           className={classes.content}
           style={{ height: `${isEditing ? '25rem' : '15rem'}` }}
@@ -138,7 +162,7 @@ const CreatePost = ({
         <button
           onClick={actionClickHandler}
           className={classes.post}
-          disabled={postContent === ''}
+          disabled={postContent === '' || uploadingImage}
         >
           {isEditing ? 'Save' : 'Publish'}
         </button>

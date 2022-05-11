@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import classes from './Profile.module.css';
 import Navbar from '../../components/navbar/Navbar';
 import getInitials from '../../utils/getInitials';
@@ -19,6 +19,7 @@ import ProfilesCard from '../../components/card/profiles-card/ProfilesCard';
 import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
 
 const Profile = () => {
+  // Name initials for profile picture
   const [initials, setinitials] = useState('');
   // user data of current profile
   const [profileUser, setProfileUser] = useState({});
@@ -28,10 +29,13 @@ const Profile = () => {
   // Is loggedin user and current profile user the same?
   const [isAuthUserProfile, setIsAuthUserProfile] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [deleteImageToken, setDeleteImageToken] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const [editProfileData, setEditProfileData] = useState({
     bio: profileUser.bio,
     portfolioUrl: profileUser.portfolioUrl,
+    displayPicture: profileUser.displayPicture,
   });
 
   const { allPosts, following, userDispatch } = useUser();
@@ -105,6 +109,48 @@ const Profile = () => {
     setIsEditingProfile((prev) => !prev);
   };
 
+  // Image
+
+  const deleteImage = async () => {
+    let res = await fetch(
+      `https://api.cloudinary.com/v1_1/dq81bdilo/delete_by_token/?token=${deleteImageToken}`,
+      {
+        method: 'POST',
+      }
+    );
+    setDeleteImageToken('');
+  };
+  const imageInputRef = useRef();
+
+  const addImageHandler = () => {
+    imageInputRef.current.click();
+  };
+
+  const imageChangeHandler = async (e) => {
+    // If user selects any other image, delete previous selected image from cloudinary
+    setUploadingImage(true);
+    if (deleteImageToken !== '' && !isEditing) {
+      await deleteImage();
+    }
+
+    let imageToUpload = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', imageToUpload);
+    formData.append('upload_preset', 'cloudsocial');
+    formData.append('cloud_name', 'dq81bdilo');
+    let res = await fetch(
+      'https://api.cloudinary.com/v1_1/dq81bdilo/image/upload/',
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+    const data = await res.json();
+    setEditProfileData((prev) => ({ ...prev, displayPicture: data.url }));
+    setDeleteImageToken(data.delete_token);
+    setUploadingImage(false);
+  };
+
   return (
     <div>
       <Navbar />
@@ -113,7 +159,14 @@ const Profile = () => {
           <div className={classes.hero}>
             <h1>Hello {profileUser.firstName}, what's on your mind today?</h1>
             <div className={classes.img}>
-              <span>{initials}</span>
+              {profileUser.displayPicture ? (
+                <img
+                  className={classes['display-picture']}
+                  src={profileUser.displayPicture}
+                />
+              ) : (
+                <span>{initials}</span>
+              )}
             </div>
           </div>
         </div>
@@ -187,6 +240,45 @@ const Profile = () => {
       </div>
       {isEditingProfile && (
         <Modal onClick={toggleEditingProfile}>
+          <div className={classes.pictures}>
+            <div className={classes.banner}>
+              <div className={classes.hero}>
+                <h1>
+                  Hello {profileUser.firstName}, what's on your mind today?
+                </h1>
+                <div onClick={addImageHandler} className={classes.dp}>
+                  {profileUser.displayPicture ? (
+                    <img
+                      className={classes['display-picture']}
+                      src={profileUser.displayPicture}
+                    />
+                  ) : (
+                    <span onClick={addImageHandler}>{initials}</span>
+                  )}
+                  <div className={classes.camera}>
+                    <input
+                      style={{ display: 'none' }}
+                      onChange={imageChangeHandler}
+                      ref={imageInputRef}
+                      type="file"
+                    />
+                    <svg
+                      className="w-6 h-6"
+                      fill="white"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className={classes.edit}>
             <label htmlFor="">Bio</label>
             <textarea
@@ -211,7 +303,11 @@ const Profile = () => {
               value={editProfileData.portfolioUrl}
               type="text"
             />
-            <button onClick={saveClickHandler} className={classes.action}>
+            <button
+              disabled={uploadingImage}
+              onClick={saveClickHandler}
+              className={classes.action}
+            >
               Save
             </button>
           </div>

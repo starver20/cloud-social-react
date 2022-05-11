@@ -35,7 +35,11 @@ function App() {
       <ToastContainer
         autoClose={3000}
         draggablePercent={50}
-        style={{ fontSize: '1.5rem' }}
+        toastClassName="dark-toast"
+        toastStyle={{ backgroundColor: `var(--card-background-color)` }}
+        style={{
+          fontSize: '1.5rem',
+        }}
         position={toast.POSITION.BOTTOM_RIGHT}
       />
     </div>
