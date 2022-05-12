@@ -26,7 +26,16 @@ const initialState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    clearData: (state) => {
+      state.followers = [];
+      state.following = [];
+      state.allPosts = [];
+      state.allUsers = [];
+      state.userPosts = [];
+      state.bookmarks = [];
+    },
+  },
   extraReducers: {
     [initialize.pending]: (state) => {
       state.status = 'loading';
@@ -143,18 +152,8 @@ export const userSlice = createSlice({
     [editPostService.rejected]: (state) => {
       state.status = 'rejected';
     },
-    // [editUserProfileService.pending]: (state) => {
-    //   state.status = 'loading';
-    // },
-    // [editUserProfileService.fulfilled]: (state, { payload }) => {
-    //   state.status = 'loading';
-    //   console.log(payload);
-    //   // state.allPosts = payload;
-    // },
-    // [editUserProfileService.rejected]: (state) => {
-    //   state.status = 'rejected';
-    // },
   },
 });
 
+export const { clearData } = userSlice.actions;
 export default userSlice.reducer;

@@ -6,12 +6,12 @@ import CreatePost from '../../components/create-post/CreatePost';
 import ProfilesCard from '../../components/card/profiles-card/ProfilesCard';
 import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
 import Post from '../../components/post/Post';
-import { useUser } from '../../context/user/user-context';
 import { logout } from '../../redux/auth/authSlice';
 import { useManipulators } from '../../hooks/useManipulators';
 import getInitials from '../../utils/getInitials';
 import { useSelector, useDispatch } from 'react-redux';
 import { initialize } from '../../redux/user/userThunk';
+import { clearData } from '../../redux/user/userSlice';
 
 const Dashboard = () => {
   const {
@@ -28,8 +28,6 @@ const Dashboard = () => {
   }, []);
 
   const dispatch = useDispatch();
-
-  const { userDispatch } = useUser();
 
   const authUser = allUsers.find((curUser) => curUser.username === username);
 
@@ -62,7 +60,7 @@ const Dashboard = () => {
   const authClickHandler = (e) => {
     // If user is logged in, then log him out and clear the wishlist and cart or else navigate to login
     if (jwt) {
-      userDispatch({ type: 'CLEAR_DATA' });
+      dispatch(clearData());
       dispatch(logout());
     }
     navigate('/login');

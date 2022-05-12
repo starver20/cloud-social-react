@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import classes from './CreatePost.module.css';
 import { createPostService, editPostService } from '../../redux/user/userThunk';
 import { useAsync } from '../../hooks/useAsync';
-import { useUser } from '../../context/user/user-context';
 import getInitials from '../../utils/getInitials';
 import Chip from '../chip/Chip';
 import { useSelector, useDispatch } from 'react-redux';
