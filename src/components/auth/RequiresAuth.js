@@ -1,9 +1,10 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/auth/auth-context';
+import { useSelector } from 'react-redux';
 
 const RequiresAuth = ({ children }) => {
-  const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
+
   const location = useLocation();
 
   return user?.jwt ? (

@@ -2,25 +2,28 @@ import React from 'react';
 import Navbar from '../../components/navbar/Navbar';
 import classes from './Auth.module.css';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/auth/auth-context';
 import { useNavigate } from 'react-router-dom';
+import { signup } from '../../redux/auth/authThunk';
+import { useDispatch } from 'react-redux';
 
 const Signup = () => {
-  const { signup } = useAuth();
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const submitClickHandler = async (e) => {
     e.preventDefault();
 
     try {
-      let { user, status } = await signup({
-        email: e.target.email.value,
-        password: e.target.password.value,
-        firstName: e.target.firstname.value,
-        lastName: e.target.lastname.value,
-      });
-
-      status === 201 && navigate('/');
+      dispatch(
+        signup({
+          username: e.target.email.value,
+          password: e.target.password.value,
+          firstName: e.target.firstname.value,
+          lastName: e.target.lastname.value,
+        })
+      );
+      navigate('/');
     } catch (err) {
       alert(err);
     }

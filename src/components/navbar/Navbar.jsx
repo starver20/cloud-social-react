@@ -1,13 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import cloud from '../../assets/cloud.png';
-import { useAuth } from '../../context/auth/auth-context';
 import { useUser } from '../../context/user/user-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/auth/authSlice';
 
 const Navbar = ({ page = 'home' }) => {
-  const { user, logout } = useAuth();
   const { userDispatch, bookmarks } = useUser();
   const navigate = useNavigate();
+
+  const user = useSelector((state) => state.auth.user);
+
+  const dispatch = useDispatch();
 
   let isBookmarked = bookmarks?.length > 0;
 
@@ -15,8 +19,7 @@ const Navbar = ({ page = 'home' }) => {
     // If user is logged in, then log him out and clear the wishlist and cart
     if (user) {
       userDispatch({ type: 'CLEAR_DATA' });
-      logout();
-      return;
+      dispatch(logout());
     }
     navigate('/login');
   };
