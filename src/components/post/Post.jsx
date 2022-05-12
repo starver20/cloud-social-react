@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useAuth } from '../../context/auth/auth-context';
 import classes from './Post.module.css';
-import { useUser } from '../../context/user/user-context';
 import { useAsync } from '../../hooks/useAsync';
 import { Link } from 'react-router-dom';
 import getInitials from '../../utils/getInitials';
 import {
+  followUserService,
   unfollowUserService,
   deletePostService,
   likePostService,
@@ -13,10 +12,10 @@ import {
   bookmarkPostService,
   unbookmarkPostService,
   addCommentService,
-  followUserService,
-} from '../../utils/user-utils';
+} from '../../redux/user/userThunk';
 import { Modal } from '../modal/Modal';
 import CreatePost from '../create-post/CreatePost';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Post = ({
   comment,
@@ -30,8 +29,11 @@ const Post = ({
   url = '',
 }) => {
   //
-  const { user } = useAuth();
-  const { userDispatch, allUsers, bookmarks } = useUser();
+  const user = useSelector((state) => state.auth.user);
+
+  const dispatch = useDispatch();
+
+  const { allUsers, bookmarks } = useSelector((state) => state.user);
 
   const isLikedByUser = likedBy.some(
     (likedByUser) => user.user.username === likedByUser.username
@@ -52,36 +54,36 @@ const Post = ({
   const commentData = { comment: commentInput, postId: _id };
 
   const { callAsyncFunction: unfollowUser, loading: unfollowLoading } =
-    useAsync(unfollowUserService, userDispatch, postUser._id);
+    useAsync(unfollowUserService, dispatch, postUser._id);
+
+  const { callAsyncFunction: followUser, followLoading } = useAsync(
+    followUserService,
+    dispatch,
+    postUser._id
+  );
 
   const { callAsyncFunction: deletePost, loading: deletePostLoading } =
-    useAsync(deletePostService, userDispatch, _id);
+    useAsync(deletePostService, dispatch, _id);
 
   const { callAsyncFunction: likePost, loading: likePostLoading } = useAsync(
     likePostService,
-    userDispatch,
+    dispatch,
     _id
   );
 
   const { callAsyncFunction: unlikePost, loading: unlikePostLoading } =
-    useAsync(unlikePostService, userDispatch, _id);
+    useAsync(unlikePostService, dispatch, _id);
 
   const { callAsyncFunction: bookmarkPost, loading: bookmarkPostLoading } =
-    useAsync(bookmarkPostService, userDispatch, _id);
+    useAsync(bookmarkPostService, dispatch, _id);
 
   const { callAsyncFunction: unbookmarkPost, loading: unbookmarkPostLoading } =
-    useAsync(unbookmarkPostService, userDispatch, _id);
+    useAsync(unbookmarkPostService, dispatch, _id);
 
   const { callAsyncFunction: addComment, addCommentLoading } = useAsync(
     addCommentService,
-    userDispatch,
+    dispatch,
     commentData
-  );
-
-  const { callAsyncFunction: followUser, followLoading } = useAsync(
-    followUserService,
-    userDispatch,
-    postUser._id
   );
 
   // Comments

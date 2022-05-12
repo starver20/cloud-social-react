@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/navbar/Navbar';
 import classes from './Auth.module.css';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/auth/auth-context';
-import { toast } from 'react-toastify';
+import { login } from '../../redux/auth/authThunk';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
-  const { login } = useAuth();
+  // const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [rememberMe, setRememberMe] = useState(false);
+
+  const dispatch = useDispatch();
 
   let navigateTo = location.state?.from?.pathname || '/';
 
   const loginClickHandler = async (e) => {
     e.preventDefault();
     try {
-      let { user, status } = await login(
-        {
-          username: e.target.email.value,
-          password: e.target.password.value,
-        },
-        rememberMe
+      dispatch(
+        login(
+          {
+            username: e.target.email.value,
+            password: e.target.password.value,
+          },
+          rememberMe
+        )
       );
 
-      if (status === 200) {
-        navigate(navigateTo, { replace: true });
-      } else {
-        alert('Invalid email or password');
-      }
+      navigate(navigateTo, { replace: true });
     } catch (err) {
       alert(err);
     }
@@ -36,19 +36,21 @@ const Login = () => {
 
   const guestLogin = async () => {
     try {
-      let { user, status } = await login(
-        {
-          username: 'adarshbalika',
-          password: 'adarshBalika123',
-        },
-        rememberMe
+      await dispatch(
+        login({
+          user: {
+            username: 'adarshbalika',
+            password: 'adarshBalika123',
+          },
+          rememberMe,
+        })
       );
 
-      if (status === 200) {
-        navigate(navigateTo, { replace: true });
-      } else {
-        alert('Invalid email or password');
-      }
+      // if (loginStatus === 'succeeded') {
+      navigate(navigateTo, { replace: true });
+      // } else {
+      // alert('Invalid email or password');
+      // }
     } catch (err) {
       alert(err);
     }

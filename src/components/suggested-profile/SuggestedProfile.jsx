@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import classes from './SuggestedProfile.module.css';
 import { useAsync } from '../../hooks/useAsync';
-import { followUserService, unfollowUserService } from '../../utils/user-utils';
-import { useUser } from '../../context/user/user-context';
-import { useAuth } from '../../context/auth/auth-context';
 import getInitials from '../../utils/getInitials';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  followUserService,
+  unfollowUserService,
+} from '../../redux/user/userThunk';
 
 const SuggestedProfile = ({ username, _id, isFollowing }) => {
-  const { userDispatch, allUsers } = useUser();
+  const dispatch = useDispatch();
 
-  const {
-    user: { user },
-  } = useAuth();
+  const { allUsers } = useSelector((state) => state.user);
 
   const curUser = allUsers.find((curUser) => curUser.username === username);
 
@@ -22,12 +22,12 @@ const SuggestedProfile = ({ username, _id, isFollowing }) => {
 
   const { callAsyncFunction: followUser, loading: followLoading } = useAsync(
     followUserService,
-    userDispatch,
+    dispatch,
     _id
   );
 
   const { callAsyncFunction: unfollowUser, loading: unfollowLoading } =
-    useAsync(unfollowUserService, userDispatch, _id);
+    useAsync(unfollowUserService, dispatch, _id);
 
   const clickHandler = () => {
     if (isFollowing) {

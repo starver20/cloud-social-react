@@ -50,6 +50,11 @@
   color: white;
 }
 
+input,
+textarea {
+  color: black;
+}
+
 iframe {
   pointer-events: none;
 }
