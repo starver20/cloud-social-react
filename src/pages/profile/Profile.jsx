@@ -156,7 +156,6 @@ const Profile = () => {
 
   // Tabs
   const onTabClicked = (e) => {
-    console.log(e.target.id, '1');
     setActive(e.target.id);
   };
 
@@ -248,15 +247,19 @@ const Profile = () => {
             >
               Posts{' '}
             </button>
-            <button
-              onClick={onTabClicked}
-              className={`${classes['tab-item']} ${
-                active === 'bookmarks' ? classes.active : ''
-              }`}
-              id="bookmarks"
-            >
-              Bookmarks{' '}
-            </button>
+            {isAuthUserProfile ? (
+              <button
+                onClick={onTabClicked}
+                className={`${classes['tab-item']} ${
+                  active === 'bookmarks' ? classes.active : ''
+                }`}
+                id="bookmarks"
+              >
+                Bookmarks{' '}
+              </button>
+            ) : (
+              ''
+            )}
           </div>
           {active === 'posts'
             ? userPosts.length > 0

@@ -9,6 +9,7 @@ import Post from '../../components/post/Post';
 import { logout } from '../../redux/auth/authSlice';
 import { useManipulators } from '../../hooks/useManipulators';
 import getInitials from '../../utils/getInitials';
+import { initialize } from '../../redux/user/userThunk';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearData } from '../../redux/user/userSlice';
 
@@ -20,19 +21,22 @@ const Dashboard = () => {
 
   const { allPosts, allUsers, following } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    // (async () => {
-    //   dispatch(initialize());
-    // })();
-  }, []);
+  // console.log(allPosts);
+  // console.log(following);
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    (() => {
+      dispatch(initialize());
+    })();
+  }, []);
+
   const authUser = allUsers.find((curUser) => curUser.username === username);
 
-  const [initials, setinitials] = useState(
-    authUser ? getInitials(authUser.firstName, authUser.lastName) : ''
-  );
+  const initials = authUser
+    ? getInitials(authUser.firstName, authUser.lastName)
+    : '';
 
   const [seeAll, setSeeAll] = useState(false);
 

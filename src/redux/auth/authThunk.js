@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { initialize } from '../user/userThunk';
 
 export const login = createAsyncThunk('auth/login', async (data) => {
   try {
@@ -19,6 +20,7 @@ export const login = createAsyncThunk('auth/login', async (data) => {
           })
         );
       }
+
       return {
         user: {
           _id: response.data.foundUser._id,
@@ -28,15 +30,13 @@ export const login = createAsyncThunk('auth/login', async (data) => {
       };
     }
   } catch (err) {
-    console.log(err);
+    toast.error('Invalid email or password!');
   }
 });
 
 export const signup = createAsyncThunk('auth/signup', async (data) => {
   try {
-    console.log(data);
     const response = await axios.post('/api/auth/signup', data);
-
     if (response.status === 201) {
       toast.success('Signup successfull.');
       return {

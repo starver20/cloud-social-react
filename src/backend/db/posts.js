@@ -9,7 +9,7 @@ import { formatDate } from '../utils/authUtils';
 export const posts = [
   {
     _id: 1,
-    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1651856162/d6pigetzqdkbbc7amxno.gif',
+    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1651856019/bci4nbgfxkgou2mf794s.jpg',
     content: 'At  consequatur aut perferendis doloribus asperiores repellat.',
     likes: {
       likeCount: 0,

@@ -2,44 +2,54 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-export const initialize = createAsyncThunk('user/initialize', async () => {
-  const localData = JSON.parse(localStorage.getItem('cloudSocialUser'));
-
-  try {
-    let {
-      data: { posts },
-    } = await axios.get('/api/posts');
-
-    let {
-      data: { users },
-    } = await axios.get('/api/users');
-    // If used api/users above, it results in namespace error while reloading on a page whose url contains params
-
-    if (localData?.user) {
+export const initialize = createAsyncThunk(
+  'user/initialize',
+  async (_, thunkAPI) => {
+    let state = thunkAPI.getState();
+    const localData =
+      JSON.parse(localStorage.getItem('cloudSocialUser')) || state.auth.user;
+    try {
       let {
-        data: { user: responseUser },
-      } = await axios.get(`/api/users/${localData?.user._id}`);
+        data: { posts },
+      } = await axios.get('/api/posts');
 
-      const { bookmarks, followers, following, username } = responseUser;
+      let {
+        data: { users },
+      } = await axios.get('/api/users');
+      // If used api/users above, it results in namespace error while reloading on a page whose url contains params
 
+      let responseUser;
+
+      if (localData?.user) {
+        let {
+          data: { user },
+        } = await axios.get(`/api/users/${localData?.user._id}`);
+
+        responseUser = user;
+      }
       return {
-        followers,
-        following,
+        followers: responseUser?.followers || [],
+        following: responseUser?.following || [],
         allPosts: posts,
         allUsers: users,
-        userPosts: posts.filter((post) => post.username === username),
-        bookmarks,
+        userPosts: posts.filter(
+          (post) => post.username === responseUser?.username
+        ),
+        bookmarks: responseUser?.bookmarks || [],
       };
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
-});
+);
 
 export const followUserService = createAsyncThunk(
   'user/follow',
-  async (userId) => {
-    const { jwt } = JSON.parse(localStorage.getItem('cloudSocialUser'));
+  async (userId, thunkAPI) => {
+    const state = thunkAPI.getState();
+
+    const { jwt } =
+      JSON.parse(localStorage.getItem('cloudSocialUser')) || state.auth.user;
 
     const response = await axios.post(
       `/api/users/follow/${userId}`,
@@ -61,8 +71,11 @@ export const followUserService = createAsyncThunk(
 
 export const unfollowUserService = createAsyncThunk(
   '/user/unfollow',
-  async (userId) => {
-    const { jwt } = JSON.parse(localStorage.getItem('cloudSocialUser'));
+  async (userId, thunkAPI) => {
+    const state = thunkAPI.getState();
+
+    const { jwt } =
+      JSON.parse(localStorage.getItem('cloudSocialUser')) || state.auth.user;
     const response = await axios.post(
       `/api/users/unfollow/${userId}`,
       {},
@@ -80,8 +93,11 @@ export const unfollowUserService = createAsyncThunk(
 
 export const deletePostService = createAsyncThunk(
   'user/deletePost',
-  async (postId) => {
-    const { jwt } = JSON.parse(localStorage.getItem('cloudSocialUser'));
+  async (postId, thunkAPI) => {
+    const state = thunkAPI.getState();
+
+    const { jwt } =
+      JSON.parse(localStorage.getItem('cloudSocialUser')) || state.auth.user;
     const response = await axios.delete(`/api/posts/${postId}`, {
       headers: { authorization: jwt },
     });
@@ -94,8 +110,11 @@ export const deletePostService = createAsyncThunk(
 
 export const likePostService = createAsyncThunk(
   'user/likePost',
-  async (postId) => {
-    const { jwt } = JSON.parse(localStorage.getItem('cloudSocialUser'));
+  async (postId, thunkAPI) => {
+    const state = thunkAPI.getState();
+
+    const { jwt } =
+      JSON.parse(localStorage.getItem('cloudSocialUser')) || state.auth.user;
     const response = await axios.post(
       `/api/posts/like/${postId}`,
       {},
@@ -112,8 +131,11 @@ export const likePostService = createAsyncThunk(
 
 export const unlikePostService = createAsyncThunk(
   'user/unlikePost',
-  async (postId) => {
-    const { jwt } = JSON.parse(localStorage.getItem('cloudSocialUser'));
+  async (postId, thunkAPI) => {
+    const state = thunkAPI.getState();
+
+    const { jwt } =
+      JSON.parse(localStorage.getItem('cloudSocialUser')) || state.auth.user;
     const response = await axios.post(
       `/api/posts/dislike/${postId}`,
       {},
@@ -130,8 +152,11 @@ export const unlikePostService = createAsyncThunk(
 
 export const bookmarkPostService = createAsyncThunk(
   'user/addBookmark',
-  async (postId) => {
-    const { jwt } = JSON.parse(localStorage.getItem('cloudSocialUser'));
+  async (postId, thunkAPI) => {
+    const state = thunkAPI.getState();
+
+    const { jwt } =
+      JSON.parse(localStorage.getItem('cloudSocialUser')) || state.auth.user;
     const response = await axios.post(
       `/api/users/bookmark/${postId}`,
       {},
@@ -147,8 +172,11 @@ export const bookmarkPostService = createAsyncThunk(
 );
 export const unbookmarkPostService = createAsyncThunk(
   'user/removeBookmark',
-  async (postId) => {
-    const { jwt } = JSON.parse(localStorage.getItem('cloudSocialUser'));
+  async (postId, thunkAPI) => {
+    const state = thunkAPI.getState();
+
+    const { jwt } =
+      JSON.parse(localStorage.getItem('cloudSocialUser')) || state.auth.user;
     const response = await axios.post(
       `/api/users/remove-bookmark/${postId}`,
       {},
@@ -165,8 +193,11 @@ export const unbookmarkPostService = createAsyncThunk(
 
 export const addCommentService = createAsyncThunk(
   'user/addComment',
-  async (commentData) => {
-    const { jwt } = JSON.parse(localStorage.getItem('cloudSocialUser'));
+  async (commentData, thunkAPI) => {
+    const state = thunkAPI.getState();
+
+    const { jwt } =
+      JSON.parse(localStorage.getItem('cloudSocialUser')) || state.auth.user;
     const response = await axios.post(
       `/api/posts/comment/${commentData.postId}`,
       { comment: commentData.comment },
@@ -184,8 +215,11 @@ export const addCommentService = createAsyncThunk(
 
 export const createPostService = createAsyncThunk(
   'user/createPost',
-  async (data) => {
-    const { jwt } = JSON.parse(localStorage.getItem('cloudSocialUser'));
+  async (data, thunkAPI) => {
+    const state = thunkAPI.getState();
+
+    const { jwt } =
+      JSON.parse(localStorage.getItem('cloudSocialUser')) || state.auth.user;
     const response = await axios.post(
       `/api/posts`,
       {
@@ -205,8 +239,11 @@ export const createPostService = createAsyncThunk(
 
 export const editPostService = createAsyncThunk(
   'user/editPost',
-  async (data) => {
-    const { jwt } = JSON.parse(localStorage.getItem('cloudSocialUser'));
+  async (data, thunkAPI) => {
+    const state = thunkAPI.getState();
+
+    const { jwt } =
+      JSON.parse(localStorage.getItem('cloudSocialUser')) || state.auth.user;
     const response = await axios.post(
       `/api/posts/edit/${data.postId}`,
       {

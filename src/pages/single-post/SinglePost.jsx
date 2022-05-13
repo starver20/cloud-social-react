@@ -18,8 +18,6 @@ const SinglePost = () => {
 
   const { allPosts } = useSelector((state) => state.user);
 
-  console.log(curPost);
-
   useEffect(() => {
     if (allPosts.length == 0) return;
     setLoading(true);

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import classes from './Explore.module.css';
-import CreatePost from '../../components/create-post/CreatePost';
 import ProfilesCard from '../../components/card/profiles-card/ProfilesCard';
 import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
 import Post from '../../components/post/Post';
@@ -19,8 +18,6 @@ const Explore = () => {
   } = useSelector((state) => state.auth.user);
 
   const { allPosts, allUsers, following } = useSelector((state) => state.user);
-
-  console.log(allPosts);
 
   const dispatch = useDispatch();
 
