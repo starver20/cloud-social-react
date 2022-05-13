@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
-import classes from './Dashboard.module.css';
+import classes from './Explore.module.css';
 import CreatePost from '../../components/create-post/CreatePost';
 import ProfilesCard from '../../components/card/profiles-card/ProfilesCard';
 import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
@@ -12,7 +12,7 @@ import getInitials from '../../utils/getInitials';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearData } from '../../redux/user/userSlice';
 
-const Dashboard = () => {
+const Explore = () => {
   const {
     user: { username, _id: userId },
     jwt,
@@ -20,11 +20,7 @@ const Dashboard = () => {
 
   const { allPosts, allUsers, following } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    // (async () => {
-    //   dispatch(initialize());
-    // })();
-  }, []);
+  console.log(allPosts);
 
   const dispatch = useDispatch();
 
@@ -40,11 +36,6 @@ const Dashboard = () => {
   const { getFollowingUsernames } = useManipulators();
 
   const followingUsernames = getFollowingUsernames(following);
-
-  const followingPosts = allPosts.filter(
-    (post) =>
-      followingUsernames.includes(post.username) || post.username === username
-  );
 
   const suggestions = allUsers
     ?.filter(
@@ -72,26 +63,19 @@ const Dashboard = () => {
       <Navbar />
       <div className={classes['main-content']}>
         <div className={classes.main}>
-          {/* <div className={`${classes['left-sidebar']} ${classes.sidebar}`}>
-            <ProfilesCard />
-          </div> */}
           <div className={classes.timeline}>
-            <CreatePost />
-            {followingPosts.length > 0 ? (
-              followingPosts
-                .reverse()
-                .map((post) => (
-                  <Post
-                    key={post.id}
-                    {...post}
-                    isFollowing={true}
-                    isUserPost={post.username === username}
-                  />
-                ))
+            {allPosts.length > 0 ? (
+              allPosts.map((post) => (
+                <Post
+                  key={post.id}
+                  {...post}
+                  isFollowing={true}
+                  isUserPost={post.username === username}
+                  isFollowing={followingUsernames.includes(post.username)}
+                />
+              ))
             ) : (
-              <h1 className={classes.nopost}>
-                Follow people to see what they post!
-              </h1>
+              <h1 className={classes.nopost}>Things are quiet around here!</h1>
             )}
           </div>
           <div className={`${classes['right-sidebar']} ${classes.sidebar}`}>
@@ -142,4 +126,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Explore;

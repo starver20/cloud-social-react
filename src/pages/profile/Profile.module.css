@@ -199,7 +199,9 @@
   /* text-align: center; */
   cursor: pointer;
   border: none;
-  font-size: var(--body-3);
+  font-size: var(--body-2);
+  font-weight: 600;
+  letter-spacing: 1px;
   background-color: var(--card-background-color);
   width: 15rem;
 }

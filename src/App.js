@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import Profile from './pages/profile/Profile';
 import SinglePost from './pages/single-post/SinglePost';
+import Explore from './pages/explore/Explore';
 // import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 function App() {
@@ -30,6 +31,14 @@ function App() {
           element={
             <RequiresAuth>
               <Profile />
+            </RequiresAuth>
+          }
+        />
+        <Route
+          path="/explore"
+          element={
+            <RequiresAuth>
+              <Explore />
             </RequiresAuth>
           }
         />

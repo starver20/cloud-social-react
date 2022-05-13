@@ -3,6 +3,7 @@ import classes from './Post.module.css';
 import { useAsync } from '../../hooks/useAsync';
 import { Link } from 'react-router-dom';
 import getInitials from '../../utils/getInitials';
+import { useNavigate } from 'react-router-dom';
 import {
   followUserService,
   unfollowUserService,
@@ -27,8 +28,12 @@ const Post = ({
   createdAt,
   isFollowing = false,
   url = '',
+  singlePost = false,
 }) => {
   //
+
+  const navigate = useNavigate();
+
   const user = useSelector((state) => state.auth.user);
 
   const dispatch = useDispatch();
@@ -182,11 +187,21 @@ const Post = ({
         </div>
       </div>
       {url !== '' && (
-        <div className={classes.img}>
+        <div
+          onClick={() => {
+            navigate(`/post/${_id}`);
+          }}
+          className={classes.img}
+        >
           <img src={url} alt="" />
         </div>
       )}
-      <div className={classes.content}>
+      <div
+        onClick={() => {
+          navigate(`/post/${_id}`);
+        }}
+        className={classes.content}
+      >
         <p>{content}</p>
       </div>
       <div className={classes['action-container']}>
@@ -264,17 +279,24 @@ const Post = ({
       <div className={classes.comments}>
         {comment.comments.length > 0 ? (
           <>
-            {comment.comments.slice(0, 2).map((comment) => (
-              <p className={classes['user-comment']}>
-                <span className={classes.user}>{comment.username}</span>{' '}
-                {comment.comment}
-              </p>
-            ))}
-            {comment.comments.length > 2 ? (
-              <Link className={classes['all-comments']} to={`post/${_id}`}>
-                View all {comment.comments.length} comments
-              </Link>
-            ) : null}
+            {comment.comments
+              // If it is on single post page show all comments, or else show firt 2
+              .slice(0, singlePost ? comment.comments.length : 2)
+              .map((comment) => (
+                <p className={classes['user-comment']}>
+                  <span className={classes.user}>{comment.username}</span>{' '}
+                  {comment.comment}
+                </p>
+              ))}
+            {!singlePost ? (
+              comment.comments.length > 2 ? (
+                <Link className={classes['all-comments']} to={`post/${_id}`}>
+                  View all {comment.comments.length} comments
+                </Link>
+              ) : null
+            ) : (
+              ''
+            )}
           </>
         ) : null}
       </div>

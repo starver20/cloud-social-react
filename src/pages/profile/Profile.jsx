@@ -60,7 +60,6 @@ const Profile = () => {
       let posts = allPosts.filter(
         (post) => post.username === responseUser.username
       );
-
       setinitials(getInitials(responseUser.firstName, responseUser.lastName));
       setProfileUser(responseUser);
       setUserPosts(posts);
