@@ -4,19 +4,18 @@ import Navbar from '../../components/navbar/Navbar';
 import getInitials from '../../utils/getInitials';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useUser } from '../../context/user/user-context';
 import Post from '../../components/post/Post';
 import { useManipulators } from '../../hooks/useManipulators';
-import { useAuth } from '../../context/auth/auth-context';
 import {
-  unfollowUserService,
   followUserService,
-  editUserProfileService,
-} from '../../utils/user-utils';
+  unfollowUserService,
+} from '../../redux/user/userThunk';
+import { editUserProfileService } from '../../redux/auth/authThunk';
 import { useAsync } from '../../hooks/useAsync';
 import { Modal } from '../../components/modal/Modal';
 import ProfilesCard from '../../components/card/profiles-card/ProfilesCard';
 import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Profile = () => {
   // Name initials for profile picture
@@ -38,14 +37,16 @@ const Profile = () => {
     displayPicture: profileUser.displayPicture,
   });
 
-  const { allPosts, following, userDispatch } = useUser();
   const { userId } = useParams();
   const { isFollowingUser } = useManipulators();
+
   const {
-    user: {
-      user: { _id: authUserId },
-    },
-  } = useAuth();
+    user: { _id: authUserId },
+  } = useSelector((state) => state.auth.user);
+
+  const { allPosts, following } = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
 
   let isFollowing = isFollowingUser(following, userId);
 
@@ -67,16 +68,16 @@ const Profile = () => {
   }, [userId, allPosts, following]);
 
   const { callAsyncFunction: unfollowUser, loading: unfollowLoading } =
-    useAsync(unfollowUserService, userDispatch, profileUser._id);
+    useAsync(unfollowUserService, dispatch, profileUser._id);
 
   const { callAsyncFunction: followUser, loading: followLoading } = useAsync(
     followUserService,
-    userDispatch,
+    dispatch,
     profileUser._id
   );
 
   const { callAsyncFunction: editUserProfile, loading: editProfileLoading } =
-    useAsync(editUserProfileService, userDispatch, editProfileData);
+    useAsync(editUserProfileService, dispatch, editProfileData);
 
   const actionClickHandler = () => {
     if (isAuthUserProfile) {

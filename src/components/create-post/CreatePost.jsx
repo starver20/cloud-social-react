@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classes from './CreatePost.module.css';
-import { createPostService, editPostService } from '../../utils/user-utils';
+import { createPostService, editPostService } from '../../redux/user/userThunk';
 import { useAsync } from '../../hooks/useAsync';
-import { useUser } from '../../context/user/user-context';
-import { useAuth } from '../../context/auth/auth-context';
 import getInitials from '../../utils/getInitials';
 import Chip from '../chip/Chip';
+import { useSelector, useDispatch } from 'react-redux';
 
 const CreatePost = ({
   closeModal,
@@ -19,14 +18,13 @@ const CreatePost = ({
   const [imageUrl, setImageUrl] = useState(url);
   const [deleteImageToken, setDeleteImageToken] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false); //So user can click 'Publish' while image is still being uploaded to cloudinary
-  const { userDispatch, allUsers } = useUser();
 
-  const {
-    user: { user },
-  } = useAuth();
+  const user = useSelector((state) => state.auth.user);
+  const { allUsers } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const authUser = allUsers.find(
-    (curUser) => curUser.username === user.username
+    (curUser) => curUser.username === user.user.username
   );
 
   const [initials, setinitials] = useState(
@@ -39,12 +37,12 @@ const CreatePost = ({
 
   const { callAsyncFunction: createPost, createPostLoading } = useAsync(
     createPostService,
-    userDispatch,
+    dispatch,
     data
   );
   const { callAsyncFunction: editPost, editPostLoading } = useAsync(
     editPostService,
-    userDispatch,
+    dispatch,
     data
   );
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import classes from './Dashboard.module.css';
@@ -6,21 +6,28 @@ import CreatePost from '../../components/create-post/CreatePost';
 import ProfilesCard from '../../components/card/profiles-card/ProfilesCard';
 import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
 import Post from '../../components/post/Post';
-import { useUser } from '../../context/user/user-context';
-import { useAuth } from '../../context/auth/auth-context';
+import { logout } from '../../redux/auth/authSlice';
 import { useManipulators } from '../../hooks/useManipulators';
 import getInitials from '../../utils/getInitials';
+import { useSelector, useDispatch } from 'react-redux';
+import { initialize } from '../../redux/user/userThunk';
+import { clearData } from '../../redux/user/userSlice';
 
 const Dashboard = () => {
   const {
-    user: {
-      user: { username, _id: userId },
-      jwt,
-    },
-    logout,
-  } = useAuth();
+    user: { username, _id: userId },
+    jwt,
+  } = useSelector((state) => state.auth.user);
 
-  const { userDispatch, allPosts, allUsers, following } = useUser();
+  const { allPosts, allUsers, following } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    (async () => {
+      dispatch(initialize());
+    })();
+  }, []);
+
+  const dispatch = useDispatch();
 
   const authUser = allUsers.find((curUser) => curUser.username === username);
 
@@ -53,9 +60,8 @@ const Dashboard = () => {
   const authClickHandler = (e) => {
     // If user is logged in, then log him out and clear the wishlist and cart or else navigate to login
     if (jwt) {
-      userDispatch({ type: 'CLEAR_DATA' });
-      logout();
-      return;
+      dispatch(clearData());
+      dispatch(logout());
     }
     navigate('/login');
   };

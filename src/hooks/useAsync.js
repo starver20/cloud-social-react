@@ -1,18 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/auth/auth-context';
+import { useSelector } from 'react-redux';
 
 const useAsync = (asyncFunction, dispatch, payload, check) => {
   const navigate = useNavigate();
-  const {
-    user: { jwt },
-  } = useAuth();
+  const { jwt } = useSelector((state) => state.auth.user);
   const [loading, setLoading] = useState(false);
 
   const callAsyncFunction = async () => {
     try {
       setLoading(true);
-      await asyncFunction(dispatch, navigate, payload, jwt, check);
+      await dispatch(asyncFunction(payload));
       setLoading(false);
     } catch (err) {
       alert(err);
