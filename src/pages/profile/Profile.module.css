@@ -186,7 +186,31 @@
   cursor: pointer;
 }
 
-@media (max-width: 1400px) {
+/* Tabs */
+
+.switch-tabs {
+  width: fit-content;
+  margin: 0 auto;
+  margin-bottom: 4rem;
+}
+
+.tab-item {
+  padding: 0.5rem;
+  /* text-align: center; */
+  cursor: pointer;
+  border: none;
+  font-size: var(--body-3);
+  background-color: var(--card-background-color);
+  width: 15rem;
+}
+
+.active {
+  background-color: var(--background-color);
+  color: white;
+  border-bottom: 2px solid white;
+}
+
+@media (max-width: 1420px) {
   .img {
     left: 50%;
     transform: translate(-50%);
