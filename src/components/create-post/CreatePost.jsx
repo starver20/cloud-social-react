@@ -27,9 +27,9 @@ const CreatePost = ({
     (curUser) => curUser.username === user.user.username
   );
 
-  const [initials, setinitials] = useState(
-    authUser ? getInitials(authUser.firstName, authUser.lastName) : ''
-  );
+  const initials = authUser
+    ? getInitials(authUser.firstName, authUser.lastName)
+    : '';
 
   const imageInputRef = useRef();
 

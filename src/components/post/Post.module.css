@@ -30,6 +30,7 @@
   width: 100%;
   aspect-ratio: 1;
   margin-top: 2rem;
+  cursor: pointer;
 }
 
 .img > img {
@@ -42,6 +43,7 @@
   margin-top: 1rem;
   color: white;
   font-size: var(--body-2);
+  cursor: pointer;
 }
 
 .actions {

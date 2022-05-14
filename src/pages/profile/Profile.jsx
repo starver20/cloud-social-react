@@ -30,6 +30,7 @@ const Profile = () => {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [deleteImageToken, setDeleteImageToken] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [editProfileData, setEditProfileData] = useState({
     bio: profileUser.bio,
@@ -44,7 +45,7 @@ const Profile = () => {
     user: { _id: authUserId },
   } = useSelector((state) => state.auth.user);
 
-  const { allPosts, following } = useSelector((state) => state.user);
+  const { allPosts, following, bookmarks } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -52,18 +53,19 @@ const Profile = () => {
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
       let response = await axios.get(`/api/users/${userId}`);
       let responseUser = response.data.user;
 
       let posts = allPosts.filter(
         (post) => post.username === responseUser.username
       );
-
       setinitials(getInitials(responseUser.firstName, responseUser.lastName));
       setProfileUser(responseUser);
       setUserPosts(posts);
       // To check if profile belongs to currently logged-in user
       setIsAuthUserProfile(responseUser._id == authUserId);
+      setLoading(false);
     })();
   }, [userId, allPosts, following]);
 
@@ -152,6 +154,15 @@ const Profile = () => {
     setUploadingImage(false);
   };
 
+  // Tabs
+  const onTabClicked = (e) => {
+    setActive(e.target.id);
+  };
+
+  const message = (text) => (
+    <p style={{ textAlign: 'center', fontSize: 'var(--header-2)' }}>{text}</p>
+  );
+
   return (
     <div>
       <Navbar />
@@ -225,9 +236,49 @@ const Profile = () => {
           </button>
         </section>
         <section className={classes.content}>
-          {userPosts.length > 0
-            ? userPosts
-                .reverse()
+          {/* Tabs here */}
+          <div className={classes['switch-tabs']}>
+            <button
+              onClick={onTabClicked}
+              className={`${classes['tab-item']} ${
+                active === 'posts' ? classes.active : ''
+              }`}
+              id="posts"
+            >
+              Posts{' '}
+            </button>
+            {isAuthUserProfile ? (
+              <button
+                onClick={onTabClicked}
+                className={`${classes['tab-item']} ${
+                  active === 'bookmarks' ? classes.active : ''
+                }`}
+                id="bookmarks"
+              >
+                Bookmarks{' '}
+              </button>
+            ) : (
+              ''
+            )}
+          </div>
+          {active === 'posts'
+            ? userPosts.length > 0
+              ? userPosts
+                  .reverse()
+                  .map((post) => (
+                    <Post
+                      key={post.id}
+                      isUserPost={isAuthUserProfile}
+                      isFollowing={isFollowing}
+                      {...post}
+                    />
+                  ))
+              : loading
+              ? message('Loading...')
+              : message('No posts published')
+            : bookmarks.length > 0
+            ? allPosts
+                .filter((post) => bookmarks.includes(post._id))
                 .map((post) => (
                   <Post
                     key={post.id}
@@ -236,7 +287,9 @@ const Profile = () => {
                     {...post}
                   />
                 ))
-            : null}
+            : loading
+            ? message('Loading...')
+            : message('No bookmarks')}
         </section>
       </div>
       {isEditingProfile && (

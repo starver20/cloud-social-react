@@ -19,13 +19,13 @@ const Login = () => {
     e.preventDefault();
     try {
       dispatch(
-        login(
-          {
-            username: e.target.email.value,
+        login({
+          user: {
+            username: e.target.username.value,
             password: e.target.password.value,
           },
-          rememberMe
-        )
+          rememberMe,
+        })
       );
 
       navigate(navigateTo, { replace: true });
@@ -66,9 +66,9 @@ const Login = () => {
           <input
             className={classes['creds']}
             type="text"
-            name="email"
-            id="email"
-            placeholder="Email address"
+            name="username"
+            id="username"
+            placeholder="Username"
           />
           <input
             className={classes['creds']}

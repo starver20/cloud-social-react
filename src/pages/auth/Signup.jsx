@@ -36,6 +36,7 @@ const Signup = () => {
           {/* <h1>CloudStore</h1> */}
           <h1>Signup</h1>
           <input
+            required
             className={classes['creds']}
             type="text"
             name="firstname"
@@ -43,6 +44,7 @@ const Signup = () => {
             placeholder="First Name"
           />
           <input
+            required
             className={classes['creds']}
             type="text"
             name="lastname"
@@ -50,6 +52,7 @@ const Signup = () => {
             placeholder="Last Name"
           />
           <input
+            required
             className={classes['creds']}
             type="text"
             name="email"
@@ -57,6 +60,7 @@ const Signup = () => {
             placeholder="Email address"
           />
           <input
+            required
             className={classes['creds']}
             type="password"
             name="password"

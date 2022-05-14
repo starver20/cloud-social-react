@@ -1,0 +1,124 @@
+.main-content {
+  background-color: var(--light-background-color);
+  min-height: calc(100vh - 50px);
+  max-width: 100vw;
+}
+
+.main {
+  width: 70%;
+  margin: 0 auto;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.sidebar {
+  width: 25%;
+  min-width: 250px;
+  position: sticky;
+  top: 7rem;
+  height: 100%;
+}
+
+.timeline {
+  width: 45%;
+  min-width: 35rem;
+}
+
+.sidebar-profile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-profile > .profile > img {
+  margin: 0 1rem 0 0;
+  cursor: pointer;
+}
+
+.profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.action {
+  font-size: var(--body-3);
+  font-weight: 700;
+  color: var(--primary-color);
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+
+.username {
+  font-size: var(--body-2);
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.suggestions-title {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+  font-size: var(--body-4);
+}
+
+.suggestions-title > :nth-child(2) {
+  cursor: pointer;
+}
+
+.suggestion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.suggested-profile {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.suggested-profile > img {
+  margin: 0 1rem 0 0;
+}
+
+.nopost {
+  text-align: center;
+  color: white;
+}
+
+.dp {
+  height: 4rem;
+  aspect-ratio: 1;
+  background-color: var(--light-background-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.dp span {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.display-picture {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    display: none;
+  }
+  .timeline {
+    width: 100%;
+  }
+}
