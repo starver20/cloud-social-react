@@ -164,6 +164,7 @@ export const bookmarkPostService = createAsyncThunk(
         headers: { authorization: jwt },
       }
     );
+    // console.log(response);
     if (response.status === 200) {
       toast.success('Added to bookmarks.');
       return response.data.bookmarks;

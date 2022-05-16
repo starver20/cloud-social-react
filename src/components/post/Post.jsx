@@ -44,7 +44,10 @@ const Post = ({
     (likedByUser) => user.user.username === likedByUser.username
   );
 
-  const isBookmarked = bookmarks?.includes(_id);
+  const isBookmarked = bookmarks?.includes(String(_id));
+  // console.log(String(_id));
+  // console.log(bookmarks);
+  // console.log(isBookmarked);
 
   const postUser = allUsers.find((user) => user.username === username);
 
