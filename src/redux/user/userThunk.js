@@ -38,7 +38,7 @@ export const initialize = createAsyncThunk(
         bookmarks: responseUser?.bookmarks || [],
       };
     } catch (err) {
-      console.log(err);
+      toast.error('Initialization error.');
     }
   }
 );

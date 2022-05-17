@@ -46,7 +46,6 @@ const Profile = () => {
   } = useSelector((state) => state.auth.user);
 
   const { allPosts, following, bookmarks } = useSelector((state) => state.user);
-  console.log(allPosts.filter((post) => bookmarks.includes(String(post._id))));
 
   const dispatch = useDispatch();
 
