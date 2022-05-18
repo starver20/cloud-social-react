@@ -186,7 +186,7 @@ export const unbookmarkPostService = createAsyncThunk(
       }
     );
     if (response.status === 200) {
-      toast.success('Added to bookmarks.');
+      toast.success('Removed from bookmarks.');
       return response.data.bookmarks;
     }
   }
