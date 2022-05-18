@@ -38,7 +38,7 @@ export const initialize = createAsyncThunk(
         bookmarks: responseUser?.bookmarks || [],
       };
     } catch (err) {
-      console.log(err);
+      toast.error('Initialization error.');
     }
   }
 );
@@ -164,6 +164,7 @@ export const bookmarkPostService = createAsyncThunk(
         headers: { authorization: jwt },
       }
     );
+    // console.log(response);
     if (response.status === 200) {
       toast.success('Added to bookmarks.');
       return response.data.bookmarks;
@@ -185,7 +186,7 @@ export const unbookmarkPostService = createAsyncThunk(
       }
     );
     if (response.status === 200) {
-      toast.success('Added to bookmarks.');
+      toast.success('Removed from bookmarks.');
       return response.data.bookmarks;
     }
   }

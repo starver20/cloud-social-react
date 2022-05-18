@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import classes from './Explore.module.css';
@@ -10,6 +10,8 @@ import { useManipulators } from '../../hooks/useManipulators';
 import getInitials from '../../utils/getInitials';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearData } from '../../redux/user/userSlice';
+
+const perPage = 2;
 
 const Explore = () => {
   const {
@@ -55,6 +57,44 @@ const Explore = () => {
 
   const toggleSeeAll = () => setSeeAll((prevState) => !prevState);
 
+  // infinite scrolling, currently no api calls, just slicing out posts from allPosts
+
+  const [lastElement, setLastElement] = useState(null);
+  const [pageNum, setPageNum] = useState(1);
+  const [maxPages, setMaxPages] = useState(
+    Math.ceil(allPosts.length / perPage)
+  );
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const first = entries[0];
+      if (first.isIntersecting) {
+        if (pageNum < maxPages) {
+          setPageNum((page) => page + 1);
+        }
+      }
+    },
+    { threshold: 1 }
+  );
+
+  useEffect(() => {
+    const currentElement = lastElement;
+
+    if (currentElement) {
+      observer.observe(currentElement);
+    }
+
+    return () => {
+      if (currentElement) {
+        observer.unobserve(currentElement);
+      }
+    };
+  }, [lastElement]);
+
+  useEffect(() => {
+    setMaxPages(Math.ceil(allPosts.length / perPage));
+  }, [allPosts]);
+
   return (
     <div>
       <Navbar />
@@ -62,15 +102,27 @@ const Explore = () => {
         <div className={classes.main}>
           <div className={classes.timeline}>
             {allPosts.length > 0 ? (
-              allPosts.map((post) => (
-                <Post
-                  key={post.id}
-                  {...post}
-                  isFollowing={true}
-                  isUserPost={post.username === username}
-                  isFollowing={followingUsernames.includes(post.username)}
-                />
-              ))
+              allPosts.slice(0, pageNum * perPage).map((post, index) => {
+                return index ==
+                  allPosts.slice(0, pageNum * perPage).length - 1 ? (
+                  <div key={post.id} ref={setLastElement}>
+                    <Post
+                      {...post}
+                      isFollowing={true}
+                      isUserPost={post.username === username}
+                      isFollowing={followingUsernames.includes(post.username)}
+                    />
+                  </div>
+                ) : (
+                  <Post
+                    key={post.id}
+                    {...post}
+                    isFollowing={true}
+                    isUserPost={post.username === username}
+                    isFollowing={followingUsernames.includes(post.username)}
+                  />
+                );
+              })
             ) : (
               <h1 className={classes.nopost}>Things are quiet around here!</h1>
             )}

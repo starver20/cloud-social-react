@@ -278,7 +278,7 @@ const Profile = () => {
               : message('No posts published')
             : bookmarks.length > 0
             ? allPosts
-                .filter((post) => bookmarks.includes(post._id))
+                .filter((post) => bookmarks.includes(String(post._id)))
                 .map((post) => (
                   <Post
                     key={post.id}
@@ -370,7 +370,7 @@ const Profile = () => {
       {active === 'followers' && profileUser.followers.length > 0 ? (
         <Modal
           onClick={() => {
-            setActive('');
+            setActive('posts');
           }}
         >
           <ProfilesCard>
@@ -385,7 +385,7 @@ const Profile = () => {
       {active === 'following' && profileUser.following.length > 0 ? (
         <Modal
           onClick={() => {
-            setActive('');
+            setActive('posts');
           }}
         >
           <ProfilesCard>
