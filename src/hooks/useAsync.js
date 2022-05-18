@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 
 const useAsync = (asyncFunction, dispatch, payload, check) => {
   const navigate = useNavigate();
-  const { jwt } = useSelector((state) => state.auth.user);
   const [loading, setLoading] = useState(false);
 
   const callAsyncFunction = async () => {

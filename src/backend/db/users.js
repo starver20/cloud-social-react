@@ -24,6 +24,15 @@ export const users = [
         updatedAt: formatDate(),
       },
     ],
+    stories: [
+      {
+        username: 'adarshbalika',
+        images: [
+          'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903654/nattu-adnan-Ai2TRdvI6gM-unsplash_yzille.webp',
+          'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903655/maxwell-nelson-1r2CG6EQ4-Y-unsplash_bg8haz.webp',
+        ],
+      },
+    ],
     createdAt: formatDate(),
     updatedAt: formatDate(),
   },
@@ -35,6 +44,7 @@ export const users = [
     password: 'abhishaikh123',
     followers: [],
     following: [],
+    stories: [],
     createdAt: formatDate(),
     updatedAt: formatDate(),
   },
@@ -46,6 +56,7 @@ export const users = [
     password: 'vivekbindra123',
     followers: [],
     following: [],
+    stories: [],
     createdAt: formatDate(),
     updatedAt: formatDate(),
   },
@@ -56,7 +67,7 @@ export const users = [
     username: 'adarshbalika',
     password: 'adarshBalika123',
     displayPicture:
-      'https://res.cloudinary.com/dq81bdilo/image/upload/v1651856019/bci4nbgfxkgou2mf794s.jpg',
+      'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903653/hello-hi_cx6nyi.webp',
     followers: [],
     following: [
       {
@@ -65,8 +76,26 @@ export const users = [
         lastName: 'Narute',
         username: 'amarnarute',
         password: 'amarnarute123',
+        stories: [
+          {
+            username: 'amarnarute',
+            images: [
+              'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903654/nattu-adnan-Ai2TRdvI6gM-unsplash_yzille.webp',
+              'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903655/maxwell-nelson-1r2CG6EQ4-Y-unsplash_bg8haz.webp',
+            ],
+          },
+        ],
         createdAt: formatDate(),
         updatedAt: formatDate(),
+      },
+    ],
+    stories: [
+      {
+        username: 'adarshbalika',
+        images: [
+          'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903653/terrylknox-ZSCB-1GovZ8-unsplash_vgzz96.webp',
+          'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903652/photo-1529524987368-af489318987c_m9obqe.webp',
+        ],
       },
     ],
     createdAt: formatDate(),
@@ -80,6 +109,15 @@ export const users = [
     password: 'badbalak123',
     followers: [],
     following: [],
+    stories: [
+      {
+        username: 'badbalak',
+        images: [
+          'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903653/hello-hi_cx6nyi.webp',
+          'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903653/ian-kirkland-v2kwQjH4IDs-unsplash_inusmn.webp',
+        ],
+      },
+    ],
     createdAt: formatDate(),
     updatedAt: formatDate(),
   },
@@ -91,6 +129,7 @@ export const users = [
     password: 'rohitmishra123',
     followers: [],
     following: [],
+    stories: [],
     createdAt: formatDate(),
     updatedAt: formatDate(),
   },
@@ -103,6 +142,7 @@ export const users = [
     bio: 'Badass.',
     followers: [],
     following: [],
+    stories: [],
     createdAt: formatDate(),
     updatedAt: formatDate(),
   },
@@ -114,6 +154,7 @@ export const users = [
     password: 'abhinavbindra123',
     followers: [],
     following: [],
+    stories: [],
     createdAt: formatDate(),
     updatedAt: formatDate(),
   },
@@ -125,6 +166,7 @@ export const users = [
     password: 'tigershroff123',
     followers: [],
     following: [],
+    stories: [],
     createdAt: formatDate(),
     updatedAt: formatDate(),
   },
@@ -136,6 +178,7 @@ export const users = [
     password: 'hrithikroshan123',
     followers: [],
     following: [],
+    stories: [],
     createdAt: formatDate(),
     updatedAt: formatDate(),
   },

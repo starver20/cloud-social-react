@@ -1,0 +1,59 @@
+.story-container {
+  display: inline-block;
+  margin: 0 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.username {
+  font-size: var(--body-3);
+  cursor: pointer;
+}
+
+.add-story-container > img {
+  margin: 0;
+  cursor: pointer;
+}
+
+.add-story-container {
+  margin: 0 1rem;
+}
+
+.badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  width: 2rem;
+  height: 2rem;
+}
+
+.dp {
+  width: 64px;
+  height: 64px;
+  background-color: var(--light-background-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.dp > img {
+  margin: 0;
+}
+
+.dp span {
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.display-picture {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
