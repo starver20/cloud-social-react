@@ -13,6 +13,7 @@ const StoryModal = ({ toggleShowStory, user }) => {
   const images = user.stories[0].images;
 
   const onDotClicked = (e) => {
+    e.stopPropagation();
     setCurImage(Number(e.target.id));
   };
 

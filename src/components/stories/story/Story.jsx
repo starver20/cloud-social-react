@@ -16,8 +16,7 @@ const Story = ({ user = {} }) => {
   }, [user]);
 
   const toggleShowStory = (e) => {
-    console.log('clicked');
-    e.stopPropagation();
+    e && e.stopPropagation(); //Stop propagetion when its attached to event, not when it is invoked in any other function like in StoryModal :23
     // Or else it will get clicked once on backdrop and again on story-container
     setShowStory((prevState) => !prevState);
   };
