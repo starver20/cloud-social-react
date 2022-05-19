@@ -12,9 +12,7 @@ const SinglePost = () => {
 
   const { postId } = useParams();
 
-  const {
-    user: { username, _id: userId },
-  } = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
 
   const { allPosts } = useSelector((state) => state.user);
 
@@ -41,7 +39,7 @@ const SinglePost = () => {
                 key={curPost.id}
                 {...curPost}
                 isFollowing={true}
-                isUserPost={curPost.username === username}
+                isUserPost={curPost.username === user?.username}
                 singlePost={true}
               />
             ) : (

@@ -1,0 +1,16 @@
+.stories-container {
+  overflow-y: hidden;
+  overflow-x: scroll;
+  height: 100px;
+  white-space: nowrap;
+  background-color: var(--card-background-color);
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-2);
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.stories-container::-webkit-scrollbar {
+  display: none;
+}

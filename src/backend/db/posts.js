@@ -9,7 +9,7 @@ import { formatDate } from '../utils/authUtils';
 export const posts = [
   {
     _id: 1,
-    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1651856019/bci4nbgfxkgou2mf794s.jpg',
+    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903656/galen-crout-FU40Oijx8dk-unsplash_u3pg2s.webp',
     content: 'At  consequatur aut perferendis doloribus asperiores repellat.',
     likes: {
       likeCount: 0,
@@ -27,7 +27,7 @@ export const posts = [
 
   {
     _id: 2,
-    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1651855978/dvuafylybelhwuzigj0o.jpg',
+    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903655/usgs-CGxdRJknf4I-unsplash_qfyxdf.webp',
     content: 'At consequatur aut perferendis doloribus asperiores repellat.',
     likes: {
       likeCount: 0,
@@ -44,7 +44,7 @@ export const posts = [
   },
   {
     _id: 3,
-    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1651856103/jbkypp1de1o9mapzv2wj.jpg',
+    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903655/ben-robbins-z_qdiCJXVAE-unsplash_ctridd.webp',
     content:
       'At vero Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',
     likes: {
@@ -62,7 +62,7 @@ export const posts = [
   },
   {
     _id: 4,
-    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1651856117/alebzlhztdps5rljaj0j.jpg',
+    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903655/maxwell-nelson-1r2CG6EQ4-Y-unsplash_bg8haz.webp',
     content:
       'At vero eos et, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',
     likes: {
@@ -80,7 +80,7 @@ export const posts = [
   },
   {
     _id: 5,
-    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1651856019/bci4nbgfxkgou2mf794s.jpg',
+    url: 'https://res.cloudinary.com/dq81bdilo/image/upload/v1652903654/nattu-adnan-Ai2TRdvI6gM-unsplash_yzille.webp',
     content:
       'At vero eosias consequatur aut perferendis doloribus asperiores repellat.',
     likes: {

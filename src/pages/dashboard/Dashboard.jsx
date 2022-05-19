@@ -6,6 +6,7 @@ import CreatePost from '../../components/create-post/CreatePost';
 import ProfilesCard from '../../components/card/profiles-card/ProfilesCard';
 import SuggestedProfile from '../../components/suggested-profile/SuggestedProfile';
 import Post from '../../components/post/Post';
+import Stories from '../../components/stories/stories/Stories';
 import { logout } from '../../redux/auth/authSlice';
 import { useManipulators } from '../../hooks/useManipulators';
 import getInitials from '../../utils/getInitials';
@@ -80,6 +81,7 @@ const Dashboard = () => {
             <ProfilesCard />
           </div> */}
           <div className={classes.timeline}>
+            <Stories />
             <CreatePost />
             {followingPosts.length > 0 ? (
               followingPosts
